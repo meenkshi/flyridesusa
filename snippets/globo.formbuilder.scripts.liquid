@@ -1,5 +1,5 @@
-<script src="https://www.google.com/recaptcha/api.js?onload=globoFormbuilderRecaptchaInit&render=explicit&hl=en" async defer></script>
-            <script>
+<script type="lazyload2" data-src="https://www.google.com/recaptcha/api.js?onload=globoFormbuilderRecaptchaInit&render=explicit&hl=en"></script>
+            <script type="lazyload2">
 	var Globo = Globo || {};
     var globoFormbuilderRecaptchaInit = function(){};
     Globo.FormBuilder = Globo.FormBuilder || {};
@@ -57,12 +57,12 @@
             
 </script>
 
-<link rel="preload" href="{{ 'globo.formbuilder.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+{% comment %}<link rel="preload" href="{{ 'globo.formbuilder.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">{% endcomment %}
 <noscript><link rel="stylesheet" href="{{ 'globo.formbuilder.css' | asset_url }}"></noscript>
-<link rel="stylesheet" href="{{ 'globo.formbuilder.css' | asset_url }}">
+<link rel="stylesheet" data-href="{{ 'globo.formbuilder.css' | asset_url }}">
 {% capture GF_appScript %}{{ 'globo.formbuilder.index.js' | asset_url }}{% endcapture %}
 {% assign GF_assetsPath = GF_appScript | split: 'globo.formbuilder.index.js' | first %}
-<script>
+<script type="lazyload2">
     Globo.FormBuilder.__webpack_public_path__ = "{{ GF_assetsPath }}"
 </script>
-<script src="{{GF_appScript}}" defer></script>
+<script type="lazyload2" data-src="{{GF_appScript}}"></script>
