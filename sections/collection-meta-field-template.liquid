@@ -1,0 +1,462 @@
+{% comment %}
+  The contents of the collection.liquid template can be found in /sections/collection-template.liquid
+{% endcomment %}
+
+{% if collection.metafields.global.top_banner_image.value != blank and collection.metafields.global.top_youtube_video.value == blank %}
+<div class="top_collection_bannner">
+  <a href="#sparq-main-content" ><img src="{{ collection.metafields.global.top_banner_image.value | img_url: 'original' }}" alt="{{ collection.title }}" width="100%" heigth="100vh"></a>
+  <a href="#sparq-main-content" ><h1 class="collectionTitle collection-top-title">{{ collection.title }}</h1></a>
+</div>
+{% endif %}
+{% if collection.metafields.global.top_banner_image.value == blank and collection.metafields.global.top_youtube_video.value != blank and collection.metafields.global.top_youtube_video_thumbnail.value != blank %}
+<!--<div class="top_collection_video">
+<iframe itemprop="video" style="background-image: url({{ collection.metafields.global.top_youtube_video_thumbnail.value | img_url: 'original' }}); background-repeat: no-repeat; background-size: 100% 100%;" src="{{ collection.metafields.global.top_youtube_video.value }}?autoplay=1&enablejsapi=1&mute=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto;}span,img{left:0px;right:0px;bottom:0px;width:100%;}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}@media only screen and (max-width: 420px){span{font: 18px/1.5 sans-serif;}}</style><a href={{ collection.metafields.global.top_youtube_video.value }}?autoplay=1&enablejsapi=1&mute=1><span style='background-color:rgba(0,0,0,.6);'>Click ▶ to play</span></a>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+</div>-->
+<div class="top_collection_videoNew">
+  <iframe itemprop="video" width="560" height="315" src="{{ collection.metafields.global.top_youtube_video.value }}?autoplay=1&enablejsapi=1&mute=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}@media only screen and (max-width: 420px){span.clickPlay{font: 18px/1.5 sans-serif;}}</style><a href={{ collection.metafields.global.top_youtube_video.value }}?autoplay=1&enablejsapi=1&mute=1><img src={{ collection.metafields.global.top_youtube_video_thumbnail.value | img_url: 'original' }} alt='{{ collection.title }}'><span class='clickPlay' style='background-color:rgba(0,0,0,.6);'>Click ▶ to play</span></a>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+</div>
+{% endif %}
+{% if collection.metafields.global.top_banner_image.value != blank and collection.metafields.global.top_youtube_video.value != blank %}
+<div class="top_collection_bannner" >
+  <a href="#sparq-main-content" ><img src="{{ collection.metafields.global.top_banner_image.value | img_url: 'original' }}" alt="{{ collection.title }}" width="100%" heigth="100vh"></a>
+  <a href="#sparq-main-content" ><h1 class="collectionTitle collection-top-title">{{ collection.title }}</h1></a>
+</div>
+{% endif %}
+
+<div class="container ">
+  <div class="main_content_area content"> 
+ 
+<!--Accordion-1 -->  
+  {% if collection.metafields.global.accordion_1_title.value and collection.metafields.global.accordion_1_title.value != blank and collection.metafields.global.accordion_1_contents.value  != blank %}
+   
+    <button class="accordion accordone"><h2 title="{{ collection.metafields.global.accordion_1_title.value }}">{{ collection.metafields.global.accordion_1_title.value }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_1_contents.value  }}</p>
+    </div>
+   {% endif %}
+     </div>
+<!--Accordion-2 --> 
+ {% if collection.metafields.global.accordion_2_title.value and collection.metafields.global.accordion_2_title.value != blank and collection.metafields.global.accordion_2_contents.value  != blank %}
+   
+    <button class="accordion accordtwo"><h2 title="{{ collection.metafields.global.accordion_2_title.value }}">{{ collection.metafields.global.accordion_2_title.value }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_2_contents.value  }}</p>
+    </div>
+   {% endif %}
+<!--Accordion-3 --> 
+{% if collection.metafields.global.accordion_3_title.value and collection.metafields.global.accordion_3_title.value != blank and collection.metafields.global.accordion_3_contents.value  != blank %}
+   
+      <button class="accordion accordthree"><h2 title="{{ collection.metafields.global.accordion_3_title.value }}">{{ collection.metafields.global.accordion_3_title.value  }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_3_contents.value  }}</p>
+    </div>
+   {% endif %}
+<!--Accordion-4 --> 
+{% if collection.metafields.global.accordion_4_title.value and collection.metafields.global.accordion_4_title.value != blank and collection.metafields.global.accordion_4_contents.value  != blank %}
+   
+      <button class="accordion accordfour"><h2 title="{{ collection.metafields.global.accordion_4_title.value }}">{{ collection.metafields.global.accordion_4_title.value }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_4_contents.value  }}</p>
+    </div>
+   {% endif %}
+  <!--Accordion-5 --> 
+{% if collection.metafields.global.accordion_5_title.value and collection.metafields.global.accordion_5_title.value != blank and collection.metafields.global.accordion_5_contents.value  != blank %}
+   
+      <button  class="accordion accordfive"><h2 title="{{ collection.metafields.global.accordion_5_title.value }}">{{ collection.metafields.global.accordion_5_title.value }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_5_contents.value  }}</p>
+    </div>
+   {% endif %}
+    <!--Accordion-6 --> 
+{% if collection.metafields.global.accordion_6_title.value and collection.metafields.global.accordion_6_title.value != blank and collection.metafields.global.accordion_6_contents.value  != blank %}
+   
+      <button  class="accordion accordsix"><h2 title="{{ collection.metafields.global.accordion_6_title.value }}">{{ collection.metafields.global.accordion_6_title.value }}</h2> <img class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_6_contents.value  }}</p>
+    </div>
+   {% endif %}
+    <!--Accordion-7 --> 
+{% if collection.metafields.global.accordion_7_title.value and collection.metafields.global.accordion_7_title.value != blank and collection.metafields.global.accordion_7_contents.value  != blank %}
+   
+      <button class="accordion accordseven"><h2 title="{{ collection.metafields.global.accordion_7_title.value }}">{{ collection.metafields.global.accordion_7_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_7_contents.value  }}</p>
+    </div>
+   {% endif %}
+  <!--Accordion-8 --> 
+{% if collection.metafields.global.accordion_8_title.value and collection.metafields.global.accordion_8_title.value != blank and collection.metafields.global.accordion_8_contents.value  != blank %}
+   
+      <button class="accordion accordeight"><h2 title="{{ collection.metafields.global.accordion_8_title.value }}">{{ collection.metafields.global.accordion_8_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_8_contents.value  }}</p>
+    </div>
+   {% endif %}
+  <!--Accordion-9 --> 
+{% if collection.metafields.global.accordion_9_title.value and collection.metafields.global.accordion_9_title.value != blank and collection.metafields.global.accordion_9_contents.value  != blank %}
+   
+      <button class="accordion accordnine"><h2 title="{{ collection.metafields.global.accordion_9_title.value }}">{{ collection.metafields.global.accordion_9_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_9_contents.value  }}</p>
+    </div>
+   {% endif %}
+  <!--Accordion-10 --> 
+{% if collection.metafields.global.accordion_10_title.value and collection.metafields.global.accordion_10_title.value != blank and collection.metafields.global.accordion_10_contents.value  != blank %}
+   
+      <button class="accordion accordten"><h2 title="{{ collection.metafields.global.accordion_10_title.value }}">{{ collection.metafields.global.accordion_10_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+    <div class="panel">
+      <p>{{ collection.metafields.global.accordion_10_contents.value  }}</p>
+    </div>
+   {% endif %}
+   <!--Accordion-11 --> 
+  {% if collection.metafields.global.accordion_11_title.value and collection.metafields.global.accordion_11_title.value != blank and collection.metafields.global.accordion_11_contents.value  != blank %}
+
+        <button class="accordion accordelelven"><h2 title="{{ collection.metafields.global.accordion_11_title.value }}">{{ collection.metafields.global.accordion_11_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+      <div class="panel">
+        <p>{{ collection.metafields.global.accordion_11_contents.value  }}</p>
+      </div>
+     {% endif %}
+  <!--Accordion-12 --> 
+  {% if collection.metafields.global.accordion_12_title.value and collection.metafields.global.accordion_12_title.value != blank and collection.metafields.global.accordion_12_contents.value  != blank %}
+
+        <button class="accordion accordtwelve"><h2 title="{{ collection.metafields.global.accordion_12_title.value }}">{{ collection.metafields.global.accordion_12_title.value }}</h2> <img  class="accordionImg" src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485" /></button>
+      <div class="panel">
+        <p>{{ collection.metafields.global.accordion_12_contents.value  }}</p>
+      </div>
+     {% endif %}
+  <!-- -->
+  
+{% if collection.description != blank %}
+    
+    <div class="container collectionmeta"> 
+      {% comment %} <h1 class="collectionTitle">{{ collection.title }}</h1>{% endcomment %}
+
+      <div class="content_area">        
+          <div class="clearfix">
+            {{ collection.description }}
+          </div>      
+
+    </div>
+    </div>
+ {% endif %}
+  {% if section.settings.collection_breadcrumb %}
+    <div class="sixteen columns breadcrumb clearfix">
+      <div class="eight columns breadcrumb_text alpha" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a><meta itemprop="position" content="1" /></span>
+        &nbsp; / &nbsp;
+        <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ collection.url }}" title="{{ collection.title | escape }}" itemprop="item"><span itemprop="name">{{ collection.title }}</span></a><meta itemprop="position" content="2" /></span>
+        {% if current_tags %}
+          {% for tag in current_tags %}
+            &nbsp; / &nbsp;
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}" title="{{ tag | escape }}" itemprop="item"><span itemprop="name">{{ tag }}</span></a><meta itemprop="position" content="3" /></span>
+          {% endfor %}
+        {% endif %}
+
+        {% if paginate.pages != 0 %}
+          &nbsp; / &nbsp; {{ 'general.breadcrumbs.page' | t: current_page: paginate.current_page, pages: paginate.pages }}
+        {% endif %}
+      </div>
+
+      {% if collection.handle != blank and collection.products_count > 0 %}
+    
+      {% endif %}
+    </div>
+  {% endif %}
+    
+     {% render 'collection-sparq' %}
+ 
+</div>
+
+<div class="reputon-google-reviews-widget" id="4ffef510-7b93-11eb-97b5-1fd6964725b0" ></div>
+<style>
+ div.main_content_area {
+    padding-top: 50px;
+} 
+  
+ .top_collection_video .mediaWrapper {
+    max-width:100%;
+    margin:0px auto;
+    height:100vh !important;
+    overflow: hidden;
+  }  
+  
+ .mediaWrapper iframe{ visibility: visible !important;}  
+.top_collection_bannner{position:relative;}
+.top_collection_bannner img {
+    width: 100%;
+/*     height:100vh; */
+}  
+ h1.collectionTitle.collection-top-title {
+   position: absolute;
+   bottom: 10px;
+   color: #fff;
+   background: #00000087;
+   margin-bottom: 0;
+   padding: 5px 20px;
+}
+.accordion {
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  color: #55bdc5;
+  font-size: 22px;
+  text-transform: none;
+  font-weight: 300;
+  border-top: 1px solid #000;
+  border-radius: 0px;
+  background-color: #fff !important;
+  padding: 8px 16px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-decoration: none;
+  font-family: Lato,sans-serif;
+  background: #fff !important;
+}
+.accordion h2{
+  display:inline;
+  font-family: Lato,sans-serif !important;
+  text-transform: none;
+  font-weight: 900;
+  background-color: #fff;
+  background: #fff !important;
+}
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+}
+.accordion:hover{
+  /*color: #ed588d !important;*/
+  background-color: transparent !important;
+}
+ .accordionImg{
+    float: right;
+    width: 16px;
+    padding-top: 10px
+  }
+ .panel .mediaWrapper {
+    max-width:100%;
+    margin:0px auto;
+    /*height:600px !important;*/
+       overflow: hidden;
+  }
+ @media only screen and (max-width: 1160px) {
+   #header{
+     display:flex;
+   }
+   #header a.mobile_logo_inside {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    font-size: 18px;
+    line-height: 34px;
+    z-index: -1;
+    width: auto;
+     display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    -ms-flex-pack: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+     
+   }
+   #header a.mobile_logo_inside img {
+    width: auto;
+    max-width: 140px;
+    max-height: 30px;
+   }
+   .header .container{
+         display: none;
+   }
+ }
+ @media only screen and (max-width: 1024px) {
+   .sq-meta-tag-1, .sparq-price-1 .sq-price-1, .sq-column-price .sq-mrp-final-price, span.sq-mrp-price, .sparq-price .sq-price{
+     font-size: 11px !important;
+   }
+ }
+   @media only screen and (max-width: 950px) {
+     .panel .mediaWrapper{
+       /* height:500px !important;*/
+     }
+     .sparq-thumbnail-wrap {
+       height: 130px!important;
+    }
+   }
+@media only screen and (max-width: 820px) {
+  .sq-meta-tag{
+    bottom: 35% !important;
+  }
+   .panel .mediaWrapper{
+    /*height:400px !important;*/
+  }
+   .sq-meta-tag {
+    bottom: 50%!important;
+}
+  
+ }
+@media only screen and (max-width: 799px) {
+  .top_collection_videoNew, .top_collection_bannner{
+     padding-top:15px;
+   }
+}
+  @media only screen and (max-width: 768px) { 
+.top_collection_video .mediaWrapper {
+    height:60vh !important;
+ }  
+
+    .accordion h2{font-size:18px;}    
+    h1.collectionTitle.collection-top-title {
+    font-size: 18px;
+} 
+    
+  .panel img{
+     width:100%;
+  }
+     .top_collection_bannner img {
+/*     height:60vh; */
+} 
+
+  .sparq-thumbnail-wrap {
+      height: 230px!important;
+  }
+  .sq-meta-tag {
+      bottom: 40%!important;
+  }
+}
+  @media only screen and (max-width: 600px) {
+     .panel .mediaWrapper{
+    /*height:300px !important; */ 
+  }  
+  }
+ @media only screen and (max-width: 520px) {
+  .top_collection_bannner img {
+/*     height:40vh; */
+   } 
+   .accordion {
+     font-size:18px;
+   }
+   .top_collection_bannner{
+     padding-top: 15px;
+   }
+  
+ }
+@media only screen and (max-width: 480px) {
+   .panel .mediaWrapper{
+   /* height:200px !important;*/
+  }   
+}
+@media only screen and (max-width: 420px) {
+  .top_collection_bannner img {
+/*     height:30vh; */
+   } 
+  .sparq-product-title a{
+    line-height:20px !important;
+  }
+  #sparq-container .sparq-thumbnail-wrap {
+    height: 100px !important;
+  }
+  .sq-meta-tag {
+    bottom: 60%!important;
+}
+ }
+  .relativeCls{
+    position:relative !important;
+    transform: translate3d(0px, 0px, 0px) !important; 
+    left:0px !important;
+    width: 100% !important;
+  }
+  .panel .mediaWrapper iframe{
+    visibility: hidden;
+  }
+  @media only screen and (min-width: 1600px) {
+    .top_collection_bannner img {
+      width: 100%;
+/*       height:100vh; */
+     }  
+  }
+@media only screen and (min-width: 1160px) {
+   .top_collection_videoNew, .top_collection_bannner{
+     padding-top:55px;
+   }
+}
+@media only screen and (min-width: 800px) and (max-width: 1159px){
+  .top_collection_videoNew, .top_collection_bannner{
+     padding-top:40px;
+   }
+  }
+@media only screen and (min-width: 700px) and (max-width: 798px){
+  .container {
+    width: 650px;
+  }
+   #sparq-container .sparq-price-filter-container .input-range-right .sparq-formatted-max-price[data-v-856020ea], #sparq-container .sparq-price-filter-container .input-range-left .sparq-formatted-min-price[data-v-856020ea]{
+     font-size:12px !important;
+   }
+}
+@media only screen and (min-width: 500px) and (max-width: 699px){
+  .container {
+    width: 500px;
+  }
+ 
+</style>
+<script>
+  $(document).ready(function() {
+  $(window).scroll(function() {
+    $(".sq-sidebar-md__inner").addClass("relativeCls");
+    if ($(document).scrollTop() > 3500) {
+     
+      $(".sq-filter-sidebar").removeClass("is-affixed");    
+      $(".sq-sidebar-md__inner").css("position", "relative");
+      $(".sq-sidebar-md__inner").css("transform", "translate3d(0px, 0px, 0px)");
+    } 
+    
+  });
+});
+ var acc = document.getElementsByClassName("accordion");
+var imageCls = document.querySelector('.accordionImg');
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    
+    var currentClassName = $(this).attr('class');
+    var spilitClsname = currentClassName.split(" ");
+    var spilitClassname = spilitClsname[1];
+    var fullClassName =   "."+spilitClassname+" img";
+      
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+      console.log(fullClassName);
+      $(fullClassName).attr("src","https://cdn.shopify.com/s/files/1/0612/4905/files/plus-iocn.png?v=1651727485");
+      
+    } else {
+      panel.style.display = "block";      
+      $(fullClassName).attr("src","https://cdn.shopify.com/s/files/1/0612/4905/files/download.png?v=1651728044");
+    }
+  });
+}
+ 
+setTimeout(function() {
+   $('.panel .mediaWrapper iframe').css("visibility", "visible");
+  }, 5000);
+
+
+
+</script>
+
+
+
+

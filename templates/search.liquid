@@ -1,0 +1,9 @@
+{% comment %}
+  The contents of the search.liquid template can be found in /sections/search-template.liquid
+{% endcomment %}
+
+ {% if search.results[0].object_type != 'article' and search.results[0].object_type != blank %}
+    {% render 'collection-sparq' %}{% include 'wiser_recentview' %}{% include 'wiser_trending' %}{% include 'wiser_topselling' %}{% include 'wiser_newarrivals' %}{% include 'wiser_featured' %}{% include 'wiser_recent_related' %}
+{% else %}
+   {% section 'search-template'%}
+{% endif %}

@@ -1,0 +1,85 @@
+{% comment %}
+  The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+<div class="main_content_area content container" data-sidebar-width>
+	<div class="breadcrumb__wrapper sixteen columns">
+	  <div class="clearfix breadcrumb">
+	    <div class="right mobile_hidden">
+	      {% if collection.previous_product %}
+	        {% capture prev_url %}{{ collection.previous_product }}{% endcapture %}
+	        {{ 'products.general.previous_product_html' | t | link_to: prev_url }}
+	        {% if collection.next_product %}&nbsp; | &nbsp;{% endif %}
+	      {% endif %}
+
+	      {% if collection.next_product %}
+	        {% capture next_url %}{{ collection.next_product }}{% endcapture %}
+	        {{ 'products.general.next_product_html' | t | link_to: next_url }}
+	      {% endif %}
+	    </div>
+
+	      <div class="breadcrumb_text" itemscope itemtype="http://schema.org/BreadcrumbList">
+	        <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a><meta itemprop="position" content="1" /></span>
+	        &nbsp; / &nbsp;
+	        <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+	          {% if collection %}
+	            <a href="{{ collection.url }}" title="{{ collection.title | escape }}" itemprop="item"><span itemprop="name">{{ collection.title }}</span></a>
+	          {% else %}
+	            <a href="/collections/all" title="{{ collections.all.title }}" itemprop="item"><span itemprop="name">{{ collections.all.title }}</span></a>
+	          {% endif %}
+	          <meta itemprop="position" content="2" />
+	        </span>
+	        &nbsp; / &nbsp;
+	        {{ product.title }}
+	      </div>
+	  </div>
+	</div>
+
+	{% section 'product__sidebar' %}
+
+	<div class="twelve columns" data-initial-width="sixteen" data-sidebar-width="twelve">
+		<div class="product-{{ product.id }}">
+			{% section 'product-template' %}
+			{% section 'product-recommendations' %}
+		</div>
+	</div>
+</div>
+
+<script text="text/javascript">
+  var _learnq = _learnq || [];
+
+  var item = {
+    Name: {{ product.title|json }},
+    ProductID: {{ product.id|json }},
+    Categories: {{ product.collections|map:'title'|json }},
+    ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor|json }},
+    Price: {{ product.price|money|json }},
+    CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+  };
+
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+
+<script type="text/javascript">
+	var _learnq = _learnq || [];
+	document.getElementById("AddToCart").addEventListener('click',function (){
+ 		_learnq.push(['track', 'Added to Cart', item]);
+	});
+</script>
+{% comment %}
+{% include 'wiser_related' %}{% include 'wiser_recommended' %}{% include 'wiser_alsobought' %}{% include 'wiser_recentview' %}{% include 'wiser_topselling' %}{% include 'wiser_trending' %}{% include 'wiser_newarrivals' %}{% include 'wiser_featured' %}{% include 'wiser_recent_related' %}
+{% endcomment %}

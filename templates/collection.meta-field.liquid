@@ -1,0 +1,12 @@
+{% comment %}
+  The contents of the collection.liquid template can be found in /sections/collection-template.liquid
+{% endcomment %}
+{% comment %}
+ If you want to roll back the collection template section file then you need to replace section file 'collection-meta-field-template' to 'collection-template'.
+ {% section 'collection-template' %}
+{% endcomment %}
+{% section 'collection-meta-field-template' %} 
+{% comment %}
+ This is commented due to task#FR-123 29-04-2022
+{% include 'wiser_trending' %}{% include 'wiser_recentview' %}{% include 'wiser_newarrivals' %}{% include 'wiser_featured' %}{% include 'wiser_topselling' %}{% include 'wiser_recent_related' %}
+{% endcomment %}

@@ -1,0 +1,43 @@
+<style>
+  .needsclick {
+    display: none!important;
+  }
+  h1.collection_title {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+  }
+  .nav {
+    display: none;
+  }
+  .sources {
+    text-align: center;
+  }
+  .sources li {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 15px;
+  }
+  .sources li img {
+    max-width: 300px;
+    margin: auto;
+  }
+  .section {
+    padding: 2% 0;
+  }
+  .references p {
+  	font-size: 14px;
+  }
+</style>
+<div class="main_content_area content container">
+  <div class="sixteen columns clearfix collection_nav">
+    <h1 class="collection_title">
+      {{ page.title }}
+    </h1>
+  </div>
+
+  <div class="sixteen columns page">
+    {% include 'page-multi-column', content: page.content %}
+  </div>
+</div>

@@ -1,0 +1,814 @@
+{% comment %}
+Comment on 6-05-2022
+{% assign currentProductQtn = product.selected_or_first_available_variant.inventory_quantity %}
+{% assign count = 0 %}
+{% assign product_qty = 0 %}
+{% for variant in product.variants %}
+  {% if variant.inventory_quantity > 0 %}
+    {% assign product_qty = product_qty | plus: variant.inventory_quantity %}
+    
+    {% if count == 0 and product.selected_or_first_available_variant.inventory_quantity == 0 %}
+     {% assign varaintAvailable = variant.id %}
+    {% endif %}
+     {% assign count = count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+{% endcomment %}
+
+
+  {% if section.settings.show_payment_button %}
+    {% assign show_payment_button = true %}
+  {% elsif show_payment_button_quickshop %}
+    {% assign show_payment_button = true %}
+  {% else %}
+    {% assign show_payment_button = false %}
+  {% endif %}
+
+  {% assign variant = product.selected_or_first_available_variant %}
+  {% include 'size-chart-popup' %}
+   {% for product_option in product.options_with_values %} 
+    
+            {% if product_option.name == 'Model Year' %}
+               {% assign modelCurrentValue= product_option.selected_value %}
+            {% endif %}
+            {% if product_option.name == 'Size' %}
+               {% assign sizeCurrentValue= product_option.selected_value %}      
+            {% endif %} 
+             {% if product_option.name == 'Color' %}
+               {% assign colorCurrentValue= product_option.selected_value %}      
+            {% endif %} 
+            {% if product_option.name == 'Style' %}
+               {% assign styleCurrentValue= product_option.selected_value %}      
+            {% endif %} 
+        {% endfor %}
+         {% assign fullCompareString1 = modelCurrentValue %}
+         {% assign fullCompareString2 = sizeCurrentValue %}
+  <div class="clearfix product_form init
+        {% if product.variants.size > 1 or product.options.size > 1 %}product_form_options{% endif %}"
+        id="product-form-finance-{{ product.id }}{{ section.id }}{{ block.id }}"
+        data-money-format="{{ shop.money_format }}"
+        data-shop-currency="{{ shop.currency }}"
+        data-select-id="product-select-{{ product.id }}{{ product-form-finance }}{{ section.id }}{{ block.id }}"
+        data-enable-state="{% if template contains 'product' %}true{% else %}false{% endif %}"
+        data-product="{{ product | json | escape }}"
+        {% if settings.limit_quantity or settings.display_inventory_left %}
+          data-variant-inventory='[{%- for v in product.variants -%}{"id":{{v.id}},"inventory_quantity":{{v.inventory_quantity}},"inventory_management":"{{v.inventory_management}}","inventory_policy":"{{v.inventory_policy}}"}{% if forloop.last == false %},{% endif %}{%- endfor -%}]'
+        {% endif %}
+        data-product-id="{{ product.id }}">
+    {% form 'product', product, id: "product-form-finance" %}
+	  <span class="mw-product-options"></span>
+      {% if product.available %}
+        {% if settings.display_inventory_left %}
+          <div class="items_left">
+            {% if variant.inventory_management != blank and variant.inventory_quantity > 0 %}
+              {% capture items_left_text %}
+                {% if variant.inventory_quantity == 1 %}
+                  {{ 'products.product.items_left_count.one' | t }}
+                {% else %}
+                  {{ 'products.product.items_left_count.other' | t }}
+                {% endif %}
+              {% endcapture %}
+              {% if variant.inventory_quantity <= settings.inventory_threshold %}
+                {{ variant.inventory_quantity }} {{ items_left_text }}
+              {% endif %}        
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+        <!-- custom -->
+    {% if product.options_by_name['Model Year'].values == blank and  product.options_by_name['Size'].values == blank and  product.options_by_name['Color'].values != blank %}  
+        {% for product_option in product.options_with_values %}
+            {% if product_option.name == 'Color' %}    
+                 {% assign currentSelectColorVal = product_option.selected_value  %}
+              {% endif %}
+         
+       {% endfor %}
+    {% endif %}                 
+         {% if product.options.size > 1 %}    
+    
+           {% for product_option in product.options_with_values %}
+              {% if product_option.name == 'Size' %}
+                 {% assign variantClassName = 'sizeOptionName'  %}
+              {% endif %}
+              {% if product_option.name == 'Model Year' %}
+                 {% assign variantClassName = 'modelyearOptionName'  %}
+              {% endif %}
+                  {% if product_option.name == 'Color' %}    
+                 {% assign currentSelectColorVal = product_option.selected_value  %}
+              {% endif %}
+              <label> {{ product_option.name }} {% if product_option.name == 'Color' %} <span style=" text-transform: capitalize;font-size: inherit; ">: {{ product_option.selected_value }} </span> {% endif %}</label>
+              {% if product_option.name != 'Color' %}
+                  <select class="{{ variantClassName }}">
+                    {% for value in product_option.values %}
+                    
+                    {% assign mainval = value | remove: '"' %}
+                    {% assign mainval = mainval | remove: ' ' %}
+                    
+                    {% assign selectmainval = product_option.selected_value | remove: '"' %}
+                    {% assign selectmainval = selectmainval | remove: ' ' %}
+                    
+                      <option value="{{ mainval }}" {% if mainval == selectmainval %}selected{% endif %}>
+                        {{ value }}
+                      </option>
+                    {% endfor %}
+                  </select>
+            {% endif %}
+   {% endfor %}
+{%endif %} 
+
+    {% assign filename = varaintallImagess | append: ''  %}
+     {% assign filenamen = filename | append: filenamen %}
+    {% capture new_var %}{{ varaintallImagess }} - {{ filename }}{% endcapture %}
+ 
+              <ul class="colorOption">
+                
+                {% for color_option in product.options_by_name['Color'].values  %}
+                   {% assign selectedClassName = ''  %}
+                
+                   {% if currentSelectColorVal == color_option %}
+                      {% assign selectedClassName = 'selectedColorName'  %}
+                   {% endif %}
+                
+                {% assign clr = color_option | remove: '"' %}
+                {% assign clr = clr | remove: ' ' %}
+                <li class="prod_variant {{ selectedClassName }}" title="{{ clr }}">
+                 
+                     {% for variant in product.variants %}
+                  
+                 {% assign varaintallImages ='' %}
+                
+                  {% if product.options_by_name['Model Year'].values != blank or  product.options_by_name['Size'].values != blank %}
+                        {% capture fullstring %}{{ fullCompareString1 }} / {{ fullCompareString2 }} / {{ color_option }} {% endcapture %}
+                      {% if product.options_by_name['Model Year'].values != blank and  product.options_by_name['Size'].values != blank %}  
+                         {% capture compareFullstring %}{{ fullCompareString1 }} / {{ fullCompareString2 }} / {% endcapture %}
+                      {% endif %}
+                     {% if product.options_by_name['Model Year'].values == blank and  product.options_by_name['Size'].values != blank %}  
+                         {% capture compareFullstring %}{{ fullCompareString2 }} / {% endcapture %}
+                      {% endif %}
+                   {% if product.options_by_name['Model Year'].values != blank and  product.options_by_name['Style'].values != blank %}  
+                         {% capture compareFullstring %}{{ fullCompareString1 }} / {{ styleCurrentValue }} / {% endcapture %}
+                      {% endif %}
+                  {% if product.options_by_name['Model Year'].values != blank and  product.options_by_name['Color'].values != blank and  product.options_by_name['Size'].values == blank %}  
+                         {% capture compareFullstring %}{{ fullCompareString1 }} / {% endcapture %}
+                      {% endif %} 
+                       {% if product.options_by_name['Model Year'].values == blank and  product.options_by_name['Color'].values != blank and  product.options_by_name['Size'].values == blank %}  
+                         {% capture compareFullstring %}{{ color_option }}{% endcapture %}
+                      {% endif %}    
+                            {% if variant.title contains compareFullstring %} 
+                                 {% assign colorSpiltarr =  variant.title | split: compareFullstring %}
+                                     {% for colorSpiltName in colorSpiltarr %}
+                                     {% if colorSpiltName == color_option %}
+                                        
+                                       {% assign varaintallImagess =  colorSpiltName %}
+                                       
+                             
+                                     {% break %}
+                 
+                                  {% endif %} {% comment %}<!-- colorSpiltName == color_option -->{% endcomment %}
+                            {% endfor %} {% comment %}<!--colorSpiltName in colorSpiltarr -->{% endcomment %}
+                          {% endif %} {% comment %}<!--variant.title contains compareFullstring -->{% endcomment %}
+                       {% endif %} {% comment %}<!--product.options_by_name['Model Year'].values != blank or  product.options_by_name['Size'].values != blank-->{% endcomment %}
+                       
+                  {% endfor %} {% comment %}<!--variant in product.variants -->{% endcomment %}
+                  
+                  {% if product.options_by_name['Model Year'].values == blank and  product.options_by_name['Size'].values == blank %}
+                  {% assign availableImg = '' %}
+                  {% else %}     
+                    {% if varaintallImagess != color_option %}
+                       {% assign availableImg = "availableImg" %}
+                    {% else %}
+                       {% assign availableImg = '' %}
+                    {% endif %}
+                  {% endif %}
+                  {% comment %}<!-- -->{% endcomment %}
+                    {% assign colornamematch =  ''  %}
+                    {% for media in product.media %}
+                        {% if color_option == media.alt %} 
+                           {% assign colornamematch =  media  %}
+                           <span  class="dot {{ availableImg }}" style="background-image: url({{ colornamematch | image_url: width: '100x' }});" >
+                           {% if availableImg != blank %}
+                              <img class="crossover" src="https://cdn.shopify.com/s/files/1/0612/4905/files/cross-line.png?v=1649995305" />
+                           {% endif %}
+                            </span>                          
+                           {% endif %}
+                    {% endfor %}
+                    {% if colornamematch == ''%}
+                      <span  class="dot {{ availableImg }}"> {{ color_option | truncate: 10 }}(No Image)
+                        {% if availableImg != blank %}
+                              <img class="crossoverpos" src="https://cdn.shopify.com/s/files/1/0612/4905/files/cross-line.png?v=1649995305" />
+                           {% endif %}
+                      </span>
+                    {% endif %}
+                {% endfor %}
+                </li>
+              </ul>
+            
+                   
+     <!-- end custom -->
+    
+      {% if product.options.size > 1 %}
+        <div class="select" style="display:none;">
+          <select id="product-select-{{ product.id }}{{ product-form-finance }}{{ section.id }}{{ block.id }}" name="id" class="multi_select">
+            {% for v in product.variants %}
+            {% assign astitle = v.title | remove: '"' %}
+            {% assign astitle = astitle | remove: ' ' %}
+              <option {% if v == variant %}selected="selected"{% endif %} value="{{ v.id }}" data-sku="{{ v.sku }}">{{ astitle }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% elsif product.options.size == 1 and product.variants.size > 1 or product.options.size == 1 and product.options[0] != "Title" %}
+        <div class="select {% if product.options_by_name['Model Year'].values != blank %} modelCls {% endif %} {% if product.options_by_name['Size'].values != blank %} sizeCls {% endif %}" style="{% if product.options_by_name['Color'].values != blank %} display:none; {% endif %}">
+          <label>{{ product.options[0] }}</label>
+           {% if product.options[0] != "Color" and product.options_by_name['Color'].values.size == blank %} 
+        <select class="multi_select" id="product-select-{{ product.id }}{{ product-form-finance }}{{ section.id }}{{ block.id }}" name="id"  >
+            {% for v in product.variants %}
+               {% assign asvtitle = v.title | remove: '"' %}
+            {% assign asvtitle = asvtitle | remove: ' ' %}
+          
+              <option {% if v == variant %}selected="selected"{% endif %} value="{{ v.id }}" data-sku="{{ v.sku }}">{{ asvtitle }}</option>
+            {% endfor %}
+          </select>
+          
+          {% else %} 
+    
+          <select id="product-select-{{ product.id }}{{ product-form-finance }}{{ section.id }}{{ block.id }}" name="id" class="multi_select">
+            {% for v in product.variants %}
+               {% assign asvptitle = v.title | remove: '"' %}
+            {% assign asvptitle = asvptitle | remove: ' ' %}
+              <option {% if v == variant %}selected="selected"{% endif %} value="{{ v.id }}" data-sku="{{ v.sku }}">{{ asvptitle }}</option>
+            {% endfor %}
+          </select>
+      
+          {% endif %}
+          
+        </div>
+      {% else %}
+        <input type="hidden" name="id" value="{{ variant.id }}" />
+      {% endif %}
+    
+      {% comment %} custom code to control metafields {% endcomment %}
+    {% include 'metafields-controller' %}
+    
+      {% if settings.product_form_style == "swatches" and product.variants.size > 1 or settings.product_form_style == "swatches" and product.options[0] != "Title" %}
+        <div class="swatch_options">
+          {% for option in product.options %}
+            {% include 'product-swatch' with option %}
+          {% endfor %}
+        </div>
+      {% endif %}
+                                                                                                                                                                                                                                                                                                        
+      <div class="purchase-details smart-payment-button--{{ show_payment_button }}">
+        {% if settings.display_product_quantity %}
+          <div class="purchase-details__quantity">
+            <label for="quantity">{{ 'products.product.quantity' | t }}</label>
+            <input type="number" min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" {% if settings.limit_quantity and variant.inventory_management != blank and variant.inventory_policy == "deny" %}max="{{ variant.inventory_quantity }}"{% endif %} />
+          </div>
+        {% endif %}
+        <div class="purchase-details__buttons">
+          {% if settings.cart_action == 'reload_page' %}
+            <input type="hidden" name="return_to" value="back" />
+          {% elsif settings.cart_action == 'redirect_checkout' %}
+            <input type="hidden" name="return_to" value="/checkout" />
+          {% endif %}
+
+           {% if variant.metafields.global.on_preorder.value == true %}
+         
+          {% include 'preorder-deposit-button' with 'product' %}
+                 
+		  {% else %}
+          {% if variant.id != 32650248618030 %} 
+          {% capture add_to_cart_label %}{% if collection_handles contains 'pre-order' %}{{ 'collections.general.pre_order' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}{% endcapture %}
+          <button id="AddToCart" type="{% if settings.cart_action == 'ajax' %} button {% else %} submit {% endif %}" name="add" class="{% if settings.cart_action == 'ajax' %} ajax-submit {% endif %} add_to_cart {% if show_payment_button %} action_button--secondary {% endif %}" {% if variant.metafields.global.on_preorder.value != true and variant.inventory_quantity <= 0 and variant.inventory_policy != "continue" %} style="display:none" {% endif %} data-label={{ add_to_cart_label | json }} >
+            <span class="text">{{ add_to_cart_label }}</span>
+          </button>
+          {% if show_payment_button %}
+            {{ form | payment_button }}
+          {% endif %}
+          
+          {% endif %}
+          {% endif %}
+          
+          
+          {% if variant.metafields.global.on_preorder.value != true and variant.inventory_quantity <= 0 and variant.inventory_policy != "continue" %}
+          <style>
+            .ajax-submit.add_to_cart.disabled{display:none;}
+            .btn.klaviyo-bis-trigger{display:none !important;}
+            .ks_btn{padding:4px 20px !important;}
+          </style>
+          <span class="outstock"><b>Out of Stock Online</b></span>
+          <p class="speakexpert">To speak to an expert about what's available now, call or text us at <a href="tel:6193992792">(619) 399-2792</a>, or:</p>  
+          <!--<a class="button" href="javascript:void(0)" onclick="Calendly.showPopupWidget('https://calendly.com/flyrides/call-with-an-ebike-expert');return false;" style="width:100%">SCHEDULE A CALL</a>-->
+          <div class="popup-btn">
+<!-- Change the text below to what you need it to be -->
+  <a class="button" href="javascript:void(0)" style="width:100%">SCHEDULE A CALL</a>
+        
+</div>
+<div class="popup-overlay">
+<div class="popup">
+
+          <!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/flyrides/call-with-an-ebike-expert" style="min-width:320px;width:100%;height:1000px;" ></div>
+
+<!-- Calendly inline widget end -->
+<span class="popup-close"></span>
+</div>
+<!-- Coded by jotting.com -->
+{{ 'popup.js' | asset_url | script_tag }}
+</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endform %}
+  </div>
+
+{% comment%}
+Comment on 6-05-2022
+<script>
+(function($){
+    $(document).ready(function(e){
+      var origin   = window.location.origin;      
+      if(origin.indexOf('shopifypreview') == -1){       
+          var url = new URL(location.href);
+          var params = new URLSearchParams(url.search);
+          var show_top_flag = params.get('variant');
+              if ( show_top_flag == null ) {
+               {% for v in product.variants %}
+                {% assign variantid = v.id %} 
+                var mainid = {{ variantid }}
+                var mainurl = url+'?variant='+mainid
+                window.top.location.href = mainurl
+                {% break %}
+               {% endfor %}
+              }
+     }
+      
+});
+})(jQuery);
+
+</script>
+{% endcomment%}
+<script>
+(function($){
+    $(document).ready(function(e){
+      var origin   = window.location.origin;  
+      if(origin.indexOf('shopifypreview') == -1){       
+          var url = new URL(location.href);
+          var params = new URLSearchParams(url.search);
+          var show_top_flag = params.get('variant');
+        
+              if ( show_top_flag == null || show_top_flag == '') {
+                
+               var Allvarientquanity = [];
+               var Allvarientcheck = [];
+               var Allvarientid = [];
+                
+               {% for v in product.variants %}
+                
+               {% assign variantid = v.id %}
+               {% assign variantqt = v.inventory_quantity %} 
+               {% assign variantck = v.inventory_policy %} 
+                
+               var variantid = "{{ variantid }}";
+               var variantqt = "{{ variantqt }}";
+               var variantck = "{{ variantck }}";  
+               
+               Allvarientquanity.push(variantqt);
+               Allvarientcheck.push(variantck);
+               Allvarientid.push(variantid);
+                
+               {% endfor %}
+             
+              
+              var quntitynotzero = (element) => element > 0;
+              var checkquntityindex = Allvarientquanity.findIndex(quntitynotzero);  
+              var checkissellindex = Allvarientcheck.findIndex(Allvarientcheck => Allvarientcheck === "continue");
+
+              if(checkquntityindex != -1){
+                 var mainid = Allvarientid[checkquntityindex];
+              }  
+               
+              if(checkquntityindex == -1 && checkissellindex != -1){
+                 var mainid = Allvarientid[checkissellindex];
+              } 
+                
+              if(checkquntityindex == -1 && checkissellindex == -1){
+               var mainid = Allvarientid[0]; 
+              }
+                
+             if(show_top_flag == '') {
+              var mainurl = url+''+mainid
+              window.top.location.href = mainurl 
+              }
+              if(show_top_flag == null){ 
+              var mainurl = url+'?variant='+mainid
+              window.top.location.href = mainurl 
+              }             
+        }
+     }
+      
+});
+})(jQuery);
+
+</script>
+<!-- Calendly link widget begin -->
+<link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
+<!-- Calendly link widget end -->
+<style>
+  .colorOption{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+  }
+   .colorOption li{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+    display:inline-block;
+  }
+  .colorOption li{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+    display:inline-block;
+    width:70px;
+    height:50px;
+    border:1px solid #55bdc5;
+    margin-right:5px;
+    cursor:pointer;
+    border-radius: 5px;
+    padding: 1px;
+  }
+  .colorOption li:last-child{
+    margin-right:0px;
+  }
+  .selectedColorName{
+    border:2px solid #192b49 !important;
+  }
+  .colorOption li span{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    float:left;
+    text-align:center;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .flex-control-thumbs li{
+    margin-right: 10px;
+    
+   
+  }
+  
+  .flex-control-thumbs li .flex-active{ 
+    border:1px solid #ed588d;
+  }
+  .availableImg{
+    cursor: not-allowed;
+    position:relative; 
+  }
+   .availableImg .crossover{
+    /*width:50px;*/
+  }
+  .availableImg .crossoverpos{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /*width:50px;*/
+    margin: 0px auto;
+  }
+  .popup {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 50px 30px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+  position: absolute;
+  z-index: 25;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80% !important;
+  display: none;
+  width: 80%;
+  max-height: 450px !important;
+  overflow:scroll;
+}
+@media only screen and (max-width: 767px) {
+.popup {
+padding: 35px 15px;
+  
+}
+}
+.popup-close:after {
+width: 30px;
+content: '╳';
+position: fixed;
+right: 10px;
+top: 10px;
+font-size: 20px;
+line-height: 30px;
+cursor: pointer;
+}
+.popup-btn {
+cursor: pointer;
+  width:100%;
+}
+    .popup-btn a.button {
+    padding: 5px 20px;
+}
+.popup-overlay {
+position: fixed;
+height: 100%;
+width: 100% !important;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+background: rgba(0, 0, 0, 0.6);
+display: none;
+z-index: 100;
+}
+  @media screen and (max-width: 600px) {
+    .colorOption li{
+       width: 50px;
+       height: 30px;
+    }
+    .colorOption li span{
+       background-size: 100%;
+      background-position: center;
+    }
+  }
+  @media screen and (max-width: 420px) {
+  .colorOption li span{
+     font-size: 10px;
+    line-height: 12px;
+  }
+  }
+ 
+</style>
+<script>
+  $( document ).ready(function() { 
+    
+      $('.modelCls .single-option-selector').on('change', function() {
+        var modelyearValue = $(this).find("option:selected").text();
+        var modelyearValue = modelyearValue.replaceAll('"','');
+        var modelyearValue = modelyearValue.replaceAll(/ /g,'');
+        $('.multi_select option').each(function () {          
+           var multiVariantDropDownVal = this.text;
+           var multiVariantDropDownVal = multiVariantDropDownVal.replaceAll('"','');
+           if($.trim(multiVariantDropDownVal).indexOf(modelyearValue) != -1){             
+                var selectedValue = this.value;
+              setTimeout(function() {
+                 window.location.href ="?variant="+selectedValue+"&product_available=1";
+              }, 50);
+           }
+     
+         });  
+      });
+    $('.sizeCls .single-option-selector').on('change', function() {
+       var sizeValue = $(this).find("option:selected").text();
+       var sizeValue = sizeValue.replaceAll('"','');
+       var sizeValue = sizeValue.replaceAll(/ /g,'');
+        $('.multi_select option').each(function () {          
+           var multiVariantDropDownVal = this.text;
+           var multiVariantDropDownVal = multiVariantDropDownVal.replaceAll('"','');
+           if($.trim(multiVariantDropDownVal).indexOf(sizeValue) != -1){           
+                var selectedValue = this.value;
+              setTimeout(function() {
+                  window.location.href ="?variant="+selectedValue+"&product_available=1";
+              }, 50);
+           }
+     
+         });  
+      });
+    
+    {% comment %}
+    //Comment on 6-05-2022
+    var currentProductQtn = "{{ currentProductQtn }}";
+    var variantId = "{{ varaintAvailable }}";
+    var originFullpath = window.location.href; 
+    if(originFullpath.indexOf('&product_available') == -1  && currentProductQtn == 0 && variantId != ''){
+         
+         window.location.href ="?variant={{ varaintAvailable }}";
+         return false;
+    }
+    {% endcomment %}
+    
+    
+    $('.sizeOptionName').on('change', function() {
+      
+
+      var sizeValue = $(this).find("option:selected").text();
+      
+      if(typeof sizeValue != 'undefined'){
+      var sizeValue = sizeValue.replaceAll('"','');
+      var sizeValue = sizeValue.replaceAll(/ /g,'');
+      }
+      
+      var modelyearValue =  $('.modelyearOptionName').find(":selected").text();
+      
+      if(typeof modelyearValue != 'undefined'){
+      var modelyearValue = modelyearValue.replaceAll('"','');
+      var modelyearValue = modelyearValue.replaceAll(/ /g,'');
+      }
+      
+      var colorValue= $(".selectedColorName").attr('title');
+      
+      if(typeof colorValue != 'undefined'){
+      var colorValue = colorValue.replaceAll(/ /g,'');
+      }
+      
+   
+      if($.trim(modelyearValue) != '' && $.trim(sizeValue) != '' && colorValue != ''){
+          var fullOptionName =  $.trim(modelyearValue)+ "/" + $.trim(sizeValue) + "/" + $.trim(colorValue);
+      }
+      if($.trim(modelyearValue) == '' && $.trim(sizeValue) != ''){
+          var fullOptionName =  $.trim(sizeValue) + "/" + $.trim(colorValue);
+          
+      } 
+      
+      if($.trim(modelyearValue) != '' && $.trim(sizeValue) != '' && colorValue == ''){
+         var fullOptionName =  $.trim(modelyearValue)+ "/" + $.trim(sizeValue); 
+      }
+      var fullOptionNamen = $.trim(fullOptionName);
+      var previewFullPath = window.location.href;
+      var spiliturl =  previewFullPath.split("&variant");     
+      if(spiliturl[0] != ''){
+        var previewFullPath = spiliturl[0];
+      }
+         $('.multi_select option').each(function () {  
+             
+             var multiVariantDropDownVal = this.text;
+             var multiVariantDropDownVal = multiVariantDropDownVal.replaceAll('"','');
+
+          
+               
+               if($.trim(multiVariantDropDownVal).indexOf(fullOptionNamen) != -1){           
+                var selectedValue = this.value;
+                 
+                 if(origin.indexOf('shopifypreview') != -1){                   
+                     window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                 }else{
+                      window.location.href ="?variant="+selectedValue+"&product_available=1";
+                 }
+                 return false;
+               }else{
+                  if($.trim(modelyearValue) != '' && $.trim(sizeValue) != '' && colorValue != ''){
+                    var sizeValuecon =  $.trim(modelyearValue)+ "/" + $.trim(sizeValue);
+                    var sizeValuecon = sizeValuecon.replaceAll('"','');
+                    var sizeValuecon = sizeValuecon.replaceAll(/ /g,'');
+              
+                    
+                      if(multiVariantDropDownVal.indexOf($.trim(sizeValuecon)) != -1){
+                           var selectedValue = this.value;
+                          if(origin.indexOf('shopifypreview') != -1){                   
+                              window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                       }else{
+                           window.location.href ="?variant="+selectedValue+"&product_available=1";
+                           return false;
+                        }
+
+                      }
+                    
+                  }else{
+                    if(multiVariantDropDownVal.indexOf($.trim(sizeValue)) != -1){
+                       
+                           var selectedValue = this.value;
+                      if(origin.indexOf('shopifypreview') != -1){                   
+                           window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                         }else{
+                           window.location.href ="?variant="+selectedValue+"&product_available=1";
+                         }
+                           return false;
+
+                      }
+                  }
+               }
+           
+          });
+     });
+    $('.modelyearOptionName').on('change', function() {
+      var modelyearValue =$(this).find("option:selected").text();
+      var sizeValue =  $('.sizeOptionName').find(":selected").text();
+      var colorValue= $(".selectedColorName").attr('title'); 
+      
+      
+      if(typeof sizeValue != 'undefined'){
+       var sizeValue = sizeValue.replaceAll('"','');
+       var sizeValue = sizeValue.replaceAll(/ /g,'');
+      }
+  
+      if(typeof modelyearValue != 'undefined'){
+      var modelyearValue = modelyearValue.replaceAll('"','');
+      var modelyearValue = modelyearValue.replaceAll(/ /g,'');
+      }
+      
+      if(typeof colorValue != 'undefined'){
+      var colorValue = colorValue.replaceAll(/ /g,'');
+      }
+      
+      var fullOptionName =  $.trim(modelyearValue)+ "/" + $.trim(sizeValue) + "/" + colorValue; 
+      var previewFullPath = window.location.href;
+      var spiliturl =  previewFullPath.split("&variant");
+      if(spiliturl[0] != '' ){
+        var previewFullPath = spiliturl[0];
+      }
+         $('.multi_select option').each(function () { 
+            var multiVariantDropDownVal = this.text; 
+            var multiVariantDropDownVal = multiVariantDropDownVal.replaceAll('"','');
+            
+             
+            if(multiVariantDropDownVal.indexOf(fullOptionName) != -1){
+                     
+                var selectedValue = this.value;
+              if(origin.indexOf('shopifypreview') != -1){                   
+                     window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                 }else{
+                window.location.href ="?variant="+selectedValue+"&product_available=1";
+                 }
+                 return false;
+            }else{
+              
+              if(multiVariantDropDownVal.indexOf($.trim(modelyearValue)) != -1){
+                 var selectedValue = this.value;
+                if(origin.indexOf('shopifypreview') != -1){                   
+                     window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                 }else{
+                 window.location.href ="?variant="+selectedValue+"&product_available=1";
+                 }
+                 return false;
+
+               }
+              
+            }
+          });     
+     });
+     $( ".colorOption li" ).click(function() {
+       //alert(this.title);
+          var sizeValue =  $('.sizeOptionName').find(":selected").text();
+          var modelyearValue =  $('.modelyearOptionName').find(":selected").text();
+          var colorValue= this.title;
+         
+          if(typeof sizeValue != 'undefined'){
+          var sizeValue = sizeValue.replaceAll('"','');
+          var sizeValue = sizeValue.replaceAll(/ /g,'');
+          }
+       
+          if(typeof modelyearValue != 'undefined'){
+          var modelyearValue = modelyearValue.replaceAll('"','');
+          var modelyearValue = modelyearValue.replaceAll(/ /g,'');
+          }
+       
+         if(typeof colorValue != 'undefined'){ 
+          var colorValue = colorValue.replaceAll(/ /g,'');
+         }
+       
+           var previewFullPath = window.location.href;
+           var spiliturl =  previewFullPath.split("&variant");
+           if(spiliturl[0] != ''){
+            var previewFullPath = spiliturl[0];
+          }
+           if(modelyearValue != '' &&  sizeValue != ''){
+              var fullOptionName =  $.trim(modelyearValue)+ "/" + $.trim(sizeValue) + "/" + colorValue; 
+           }else{
+             var fullOptionName = colorValue;
+           }
+         
+  
+           $('.multi_select option').each(function () { 
+             
+             var multiVariantDropDownVal = this.text; 
+             var multiVariantDropDownVal = multiVariantDropDownVal.replaceAll('"','');
+       
+              
+               if(multiVariantDropDownVal.indexOf(fullOptionName) != -1){   
+                    var selectedValue = this.value; 
+                 if(origin.indexOf('shopifypreview') != -1){                   
+                     window.location.href = previewFullPath + "&variant="+selectedValue;                  
+                 }else{
+                    window.location.href ="?variant="+selectedValue+"&product_available=1";
+                 }
+                  return false;
+               }
+
+          });  
+
+            
+    });
+       
+ });
+   setTimeout(function() {
+     $(".speakexpert a").text('(619) 399-2792');
+     $(".speakexpert a").attr("href", "tel:6193992792");
+      //$(".callus_section a.callusnum").text('(619) 344-0211');
+    // $(".callus_section a.callusnum").attr("href", "tel:6193440211");
+     
+    }, 5000);  
+
+</script>

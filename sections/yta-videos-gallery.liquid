@@ -1,0 +1,39 @@
+<div class="container">
+  {% if section.settings.title != blank %}
+  <h2 class="section-header title center">{{ section.settings.title }}</h2>
+  {% endif %}
+  <div data-section-type="arena-youtube-feed" data-section-id="{{section.id}}">
+      {{ section.settings.block }}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Youtube Feed by Arena",
+    "settings": [
+					{
+						"type":"text",
+						"label":"Title",
+						"id":"title"
+					},
+					{
+						"type":"text",
+						"label":"Ensert code",
+						"placeholder":"Ensert code",
+						"id":"block"
+					}
+				],
+    "presets": 	[
+                    {
+                        "name": "Youtube Feed by Arena",
+                        "category": "Youtube Feed"
+                    }
+  				]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

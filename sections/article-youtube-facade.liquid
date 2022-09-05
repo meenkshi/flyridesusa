@@ -1,0 +1,1134 @@
+{% paginate article.comments by 100 %}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css">
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> 
+
+{% comment %}Check to see if sidebar should be enabled{% endcomment %}
+{% if section.blocks.size > 0 %}
+  {% assign sidebar = true %}
+{% else %}
+  {% assign sidebar = false %}
+{% endif %}
+{% assign totalSlides = 0 %}
+<div class="main_content_area content container" itemscope itemtype="https://schema.org/Article">
+  <div class="twelve columns {% if sidebar == false %}offset-by-two{% endif %} ">
+    <a href="{{ article.metafields.global.shop_now_button_url.value }}" class="shopNowButton desktopshopNowBtn">Shop Now</a>
+      {% if section.settings.blog_breadcrumb %}
+        <div class="clearfix breadcrumb">
+          <div class="breadcrumb_text" itemscope itemtype="http://schema.org/BreadcrumbList">
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a><meta itemprop="position" content="1" /></span>
+            &nbsp; / &nbsp;
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ blog.url }}" title="{{ blog.title | escape }}" itemprop="item"><span itemprop="name">{{ blog.title }}</span></a><meta itemprop="position" content="2" /></span>
+            &nbsp; / &nbsp;
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">{{ article.title }}</span><meta itemprop="position" content="3" /></span>
+          </div>
+        </div>
+      {% endif %} 
+
+      {% if section.settings.blog_tags %}
+        <div class="blog_meta tags {% if article.image and section.settings.slideshow_article_enabled %}right{% endif %}">
+          {% for tag in article.tags %}
+          <span><a itemprop="keywords" href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    <h1 class="article_name articleTitle"><span itemprop="name">{{ article.title }}</span></h1>
+          <div class="articleTemplateContent">
+         <div class="articleDesc">
+           <span itemprop="description">
+           {{ article.content }} 
+           </span>
+           <br/>
+          </div>      
+              <div class="main articleTemplateSlide">
+                {%- assign slideCount = 0 -%}
+                  <div class="slider slider-for">
+                    {% if article.metafields.global.video_1_url.value contains 'youtube'  and article.metafields.global.video_1_thumbnail_url != blank %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                    <div>
+                      <iframe itemprop="video" style="background-image: url({{ article.metafields.global.video_1_thumbnail_url.value | img_url: 'original' }}); background-repeat: no-repeat; background-size: 100% 100%;" src="{{ article.metafields.global.video_1_url.value }}?autoplay=1&enablejsapi=1&mute=1" srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto;}span,img{left:0px;right:0px;bottom:0px;width:100%;}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}@media only screen and (max-width: 420px){span{font: 18px/1.5 sans-serif;}}</style><a href={{ article.metafields.global.video_1_url.value }}?autoplay=1&enablejsapi=1&mute=1><!--<img src= alt='{{ article.metafields.global.video_1_title.value }}'>--><span style='background-color:rgba(0,0,0,.6);'>Click ▶ to play</span></a>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+                       </div>
+                    {% endif %}
+                     {% if article.metafields.global.video_2_url.value contains 'vimeo' and article.metafields.global.video_2_thumbnail_url != blank %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                     <div><iframe itemprop="video" src="{{ article.metafields.global.video_2_url.value }}" title="{{ article.metafields.global.video_2_title.value }}" allow="accelerometer; autoplay;" allowfullscreen="" frameborder="0"></iframe></div>
+                   
+                    {% endif %}
+                    {% if article.metafields.global.image_1_url.value %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                    <div><img itemprop="image" src="{{ article.metafields.global.image_1_url.value | img_url: '1100x455' }}" alt="{{ article.metafields.global.image_1_alt_text.value }}" title="{{ article.metafields.global.image_1_title.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_2_url.value %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                    <div><img itemprop="image" src="{{ article.metafields.global.image_2_url.value | img_url: '1100x455' }}" alt="{{ article.metafields.global.image_2_alt_text.value }}" title="{{ article.metafields.global.image_2_title.value }}"></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_3_url.value %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                    <div><img itemprop="image" src="{{ article.metafields.global.image_3_url.value | img_url: '1100x455' }}" alt="{{ article.metafields.global.image_3_alt_text.value }}" title="{{ article.metafields.global.image_3_title.value }}"></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_4_url.value %}
+                    {%- assign slideCount = slideCount | plus: 1 -%}
+                    <div><img itemprop="image" src="{{ article.metafields.global.image_4_url.value | img_url: '1100x455' }}" alt="{{ article.metafields.global.image_4_alt_text.value }}" title="{{ article.metafields.global.image_4_title.value }}"></div>
+                    {% endif %}                     
+                </div>
+                {% if slideCount > 1 %}
+                  <div class="slider slider-nav">                    
+                    {% if article.metafields.global.video_1_thumbnail_url.value != blank and article.metafields.global.video_1_url.value contains 'youtube' %}
+                      {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.video_1_thumbnail_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.video_1_alt_text.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.video_2_thumbnail_url.value != blank and article.metafields.global.video_2_url.value contains 'vimeo' %}
+                    {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.video_2_thumbnail_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.video_2_alt_text.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_1_url.value %}
+                     {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.image_1_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.image_1_alt_text.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_2_url.value %}
+                     {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.image_2_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.image_2_alt_text.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_3_url.value %}
+                     {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.image_3_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.image_3_alt_text.value }}" ></div>
+                    {% endif %}
+                    {% if article.metafields.global.image_4_url.value %}
+                     {% assign totalSlides = totalSlides | plus: 1 %}
+                    <div><img src="{{ article.metafields.global.image_4_url.value | img_url: '619x455' }}" alt="{{ article.metafields.global.image_4_alt_text.value }}" ></div>
+                    {% endif %}
+                     
+                  </div>   
+                {% endif %}
+               </div>
+            
+            {% if article.metafields.global.accordion_1_title.value and article.metafields.global.accordion_1_title.value != blank and article.metafields.global.accordion_1_contents.value  != blank %}
+                <button onclick="myFunction('productTemplateInfo')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateInfobtn">
+                  <h2>{{ article.metafields.global.accordion_1_title.value }}</h2>
+                  <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471" class="rebateimg"></span>
+                  </button>
+
+                <div id="productTemplateInfo" class="w3-hide w3-container w3-show">
+                  {{ article.metafields.global.accordion_1_contents.value }}  
+                </div>
+            {% endif %}
+            {% if article.metafields.global.accordion_2_title.value  and article.metafields.global.accordion_2_title.value != blank and article.metafields.global.accordion_2_contents.value  != blank %}
+               <button onclick="myFunction('productTemplateFeature')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateFeaturebtn">
+                 <h2> {{ article.metafields.global.accordion_2_title.value }}</h2>
+                 <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                </button>
+
+                <div id="productTemplateFeature" class="w3-hide w3-container">
+                  {{ article.metafields.global.accordion_2_contents.value }}
+                </div>
+            {% endif %}
+            {% if article.metafields.global.accordion_3_title.value and article.metafields.global.accordion_3_title.value != blank and article.metafields.global.accordion_3_contents.value != blank %}
+                <button onclick="myFunction('productTemplateInfor')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateInforbtn">
+                  <h2> {{ article.metafields.global.accordion_3_title.value }}</h2>
+                    <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                  </button>
+                      
+                <div id="productTemplateInfor" class="w3-hide w3-container">
+                  {{ article.metafields.global.accordion_3_contents.value }}
+                </div>
+             {% endif %}
+            {% if article.metafields.global.accordion_4_title.value and article.metafields.global.accordion_4_title.value != blank and article.metafields.global.accordion_4_contents.value != blank %}
+               <button onclick="myFunction('productTemplateBenefit')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateBenefitbtn">
+                 <h2> {{ article.metafields.global.accordion_4_title.value }}</h2>
+                 <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                 </button>
+
+                <div id="productTemplateBenefit" class="w3-hide w3-container">
+                   {{ article.metafields.global.accordion_4_contents.value }}
+                </div>
+             {% endif %}
+            {% if article.metafields.global.accordion_5_title.value and article.metafields.global.accordion_5_title.value != blank and article.metafields.global.accordion_5_contents.value != blank %}
+            <button onclick="myFunction('productTemplateaccordionFive')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateaccordionFivebtn">
+              <h2>   {{ article.metafields.global.accordion_5_title.value }}</h2>
+                 <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                 </button>
+
+                <div id="productTemplateaccordionFive" class="w3-hide w3-container">
+                   {{ article.metafields.global.accordion_5_contents.value }}
+                </div>
+             {% endif %}
+            {% if article.metafields.global.accordion_6_title.value and article.metafields.global.accordion_6_title.value != blank and article.metafields.global.accordion_6_contents.value != blank  %}
+            <button onclick="myFunction('productTemplateaccordionsix')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateaccordionsixbtn" {%if article.metafields.global.accordion_7_title.value == blank and article.metafields.global.accordion_7_contents.value == blank %}style="border-bottom:1px solid #000;" {% endif %}>
+              <h2>{{ article.metafields.global.accordion_6_title.value }}</h2>
+                 <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                 </button>
+
+                <div id="productTemplateaccordionsix" class="w3-hide w3-container">
+                   {{ article.metafields.global.accordion_6_contents.value }}
+                </div>
+             {% endif %}
+             {% if article.metafields.global.accordion_7_title.value and article.metafields.global.accordion_7_title.value != blank and article.metafields.global.accordion_7_contents.value != blank %}
+            <button onclick="myFunction('productTemplateaccordionseven')" class="w3-button w3-block w3-left-align productTemplateAccord" id="productTemplateaccordionsevenBtn">
+              <h2>{{ article.metafields.global.accordion_7_title.value }}</h2>
+                 <span><img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span>
+                 </button>
+
+                <div id="productTemplateaccordionseven" class="w3-hide w3-container">
+                   {{ article.metafields.global.accordion_7_contents.value }}
+                </div>
+             {% endif %}
+            <a href="{{ article.metafields.global.shop_now_button_url.value }}" class="mobileShopBtn mobileSticky">Shop Now</a>
+    </div>
+    
+    <br/><br/><br/>
+     
+         <!-- -->
+        
+        <span class="clear"></span>
+
+        {% if section.settings.display_social_buttons %}
+          <br class="clear" />
+          {% include "social-buttons" with "article" %}
+          <br class="clear" />
+        {% endif %}
+        <br class="clear" />
+
+        {% if section.settings.blog_author %}
+          <hr />
+          <div class="gravatar two columns alpha center" data-email="{{ article.user.email }}">
+            <img src="//1.gravatar.com/avatar/{{ article.user.email | md5 }}?s=160&r=G" alt="{{ article.author }}" />
+          </div>
+          <div class="comment-body eight columns omega">
+            <h6><span itemprop="author">{{ article.author }}</span></h6>
+            <p class="meta">
+              <span class="label">{{ 'blogs.article.author' | t }}</span>
+            </p>
+            <p>
+              {{ article.user.bio }}
+            </p>
+          </div>
+        {% endif %}
+
+        <div class="clear" id="comments"></div>
+        <br class="clear" />
+
+        {% if settings.disqus_enabled %}
+          <div id="disqus_thread"></div>
+          <script>
+              var disqus_config = function () {
+                  this.page.url = "{{ canonical_url }}";
+                  this.page.identifier = "{{ article.id }}";
+              };
+              (function() {
+                  var d = document, s = d.createElement('script');
+                  s.src = '//{{ settings.disqus_shortname }}.disqus.com/embed.js';
+                  s.setAttribute('data-timestamp', +new Date());
+                  (d.head || d.body).appendChild(s);
+              })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        {% elsif blog.comments_enabled? %}
+          {% if article.comments_count > 0 %}
+            <h4>{{ 'blogs.comments.response_count' | t: count: article.comments.size }}</h4>
+
+            {% for comment in article.comments %}
+              <div id="comment-{{ comment.id }}" class="comment clearfix">
+                <div class="gravatar two columns alpha center">
+                  <img src="//1.gravatar.com/avatar/{{ comment.email | md5 }}?s=80&r=G" alt="{{ comment.author }}" />
+                </div>
+                <div class="comment-body eight columns omega">
+                  <h6>{{ comment.author }}</h6>
+                  <p class="meta">
+                    <span class="label">{{ comment.created_at | date: format: "month_day_year" }}</span>
+                  </p>
+
+                  {{ comment.content }}
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          {% if comment and comment.created_at %}
+            {% if article.comments_count == 0 %}
+              <h4>{{ 'blogs.comments.response_count' | t: count: article.comments.size }}</h4>
+            {% endif %}
+            <div id="comment-{{ comment.id }}" class="comment clearfix">
+              <div class="gravatar two columns alpha center">
+                <img src="//1.gravatar.com/avatar/{{ comment.email | md5 }}?s=80&r=G" alt="{{ comment.author }}" />
+              </div>
+              <div class="comment-body eight columns omega">
+                <h6>{{ comment.author }}</h6>
+                <p class="meta">
+                  <span class="label">{{ comment.created_at | date: format: "month_day_year" }}</span>
+                </p>
+
+                {{ comment.content }}
+              </div>
+            </div>
+          {% endif %}
+
+          {% include 'pagination', sidebar: sidebar %}
+
+          <div class="clear" id="new-comment"></div>
+          <h4 class="title">{{ 'blogs.comments.title' | t }}</h4>
+
+          {% if blog.moderated? %}
+            <p><em>{{ 'blogs.comments.moderated' | t }}</em></p>
+          {% endif %}
+
+          {% form article %}
+            {% if form.posted_successfully? %}
+              {% if blog.moderated? %}
+                <p class="quote align_left">{{ 'blogs.comments.success_moderated' | t }}</p>
+              {% else %}
+                <p class="quote align_left">{{ 'blogs.comments.success' | t }}</p>
+              {% endif %}
+            {% endif %}
+
+            {% if form.errors %}
+              <p class="quote align_left">{{ 'general.forms.post_error' | t }}</p>
+            {% endif %}
+
+            <div class="six columns alpha">
+              <label for="comment_author">{{ 'blogs.comments.name' | t }} <span class="red">*</span></label>
+              <input type="text" id="comment_author" name="comment[author]" value="{{ form.author }}" required="required" />
+            </div>
+
+            <div class="six columns alpha">
+              <label for="comment_email">{{ 'blogs.comments.email' | t }} <span class="red">*</span></label>
+              <input type="text" id="comment_email" name="comment[email]" value="{{ form.email }}" required="required" />
+            </div>
+<div class="twelve columns alpha">
+            <label for="comment_body">{{ 'blogs.comments.comment' | t }} <span class="red">*</span></label>
+            <textarea id="comment_body" name="comment[body]" rows="5" required="required">{{ form.body }}</textarea>
+    </div>
+    <div class="clearfix">
+      <br>
+            <input type="submit" value="{{ 'blogs.comments.post' | t }}" id="comment-submit" class="action_button add_to_cart" style="margin-top:15px" />
+    </div> 
+      {% endform %}
+        {% endif %}
+
+    {% if section.settings.blog_additional_articles and blog.articles_count > 1 %}
+      <div class="section clearfix">
+        <hr />
+        <h3>{{ 'blogs.article.additional_articles' | t: title: blog.title }}</h3>
+
+        {% assign article_found = false %}
+        {% for a in blog.articles limit: 4 %}
+          {% assign skip_article = false %}
+          {% if article_found == false and forloop.last %}
+            {% assign skip_article = true %}
+          {% endif %}
+          {% if article.id == a.id %}
+            {% assign article_found = true %}
+            {% assign skip_article = true %}
+          {% endif %}
+          {% unless skip_article %}
+            <div class="four columns {% cycle 'alpha', ' ', 'omega' %} article">
+              {% if a.image %}
+                <a href="{{ a.url }}" title="{{ a.title | escape }}">
+                  <img  alt="{% if a.image.alt != blank %}{{ a.image.alt }}{% else %}{{ a.title | escape }}{% endif %}"
+                        data-src="{{ a.image | img_url: '1200x' }}"
+                        class="lazyload lazyload--fade-in"
+                        data-sizes="auto"
+                        data-aspectratio="{{ a.image.width }}/{{ a.image.height }}"
+                        data-srcset=" {{ a.image | img_url: '2048x' }} 2048w,
+                                      {{ a.image | img_url: '1600x' }} 1600w,
+                                      {{ a.image | img_url: '1200x' }} 1200w,
+                                      {{ a.image | img_url: '1000x' }} 1000w,
+                                      {{ a.image | img_url: '1000x' }} 900w,
+                                      {{ a.image | img_url: '800x' }} 800w,
+                                      {{ a.image | img_url: '600x' }} 600w,
+                                      {{ a.image | img_url: '400x' }} 400w"
+                         />
+                  <noscript>
+                    <img src="{{ a.image | img_url: '2048x' }}" alt="{{ a.image.alt | escape }}">
+                  </noscript>
+                </a>
+              {% endif %}
+
+              {% if section.settings.blog_tags %}
+                <div class="blog_meta tags">
+                  {% for tag in a.tags %}
+                    <span><a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title | escape }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a></span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <h5 class="sub_title">
+                <a href="{{ a.url }}" title="{{ a.title | escape }}">{{ a.title }}</a>
+              </h5>
+              <p class="blog_meta">
+                {% if section.settings.blog_author %}
+                  <span>{{ 'blogs.article.by_author' | t: author: a.author }}</span>
+                {% endif %}
+
+                {% if section.settings.blog_date %}
+                  <span>{{ a.published_at | date: format: "month_day_year" }}</span>
+                {% endif %}
+
+                {% if settings.disqus_enabled %}
+                  <span>
+                    <a href="{{ a.url }}#disqus_thread" data-disqus-identifier="{{ a.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
+                  </span>
+                {% elsif a.comments_enabled? and a.comments_count > 0 %}
+                  <span>
+                    <a href="{{ a.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: a.comments_count }}</a>
+                  </span>
+                {% endif %}
+              </p>
+
+              {% if a.excerpt != blank %}
+                {% assign postexcerpt = a.excerpt | size %}
+                  {% if postexcerpt > 100 %}
+                    {% assign excerptlength = 'lg' %}
+                  {% elsif postexcerpt <= 50 %}
+                    {% assign excerptlength = 'sm' %}
+                  {% endif %}
+                  <div class="excerpt excerpt-length--{{ excerptlength }} {{ postexcerpt }}">
+                    {{ a.excerpt }}
+                    <span class="truncation-fade"></span>
+                  </div>
+              {% endif %}
+              {% if section.settings.read_more_link %}
+                <p>
+                  <a href="{{ a.url }}" title="{{ a.title | escape }}">{{ 'blogs.general.continue_reading_html' | t }}</a>
+                </p>
+              {% endif %}
+            </div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% include "blog-sidebar", blog_handle: blog.handle %}
+
+  <script type="text/javascript">
+    // <![CDATA[
+      $(function() {
+        if(window.location.pathname.indexOf('/comments') != -1) {
+          $('html,body').animate({scrollTop: $("#new-comment").offset().top-140},'slow');
+        }
+      });
+    // ]]>
+  </script>
+{% endpaginate %}
+</div>
+
+{% schema %}
+
+{
+  "name": "Blog post",
+  "class": "article-template-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "slideshow_article_enabled",
+      "label": "Show article banner image",
+      "info": "The blog post's featured image will be used as a full-width banner",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow_post_darken",
+      "label": "Darken blog post banner image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_breadcrumb",
+      "label": "Show breadcrumb links"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_tags",
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_author",
+      "label": "Show author"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "display_social_buttons",
+      "label": "Show social media share icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_comment_count",
+      "label": "Show comment count",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Additional posts"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_additional_articles",
+      "label": "Show additional posts on blog post page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "read_more_link",
+      "label": "Show continue reading link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create a sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+     {
+       "type": "post_tags",
+       "name": "Blog post tags",
+       "limit": 1
+     },
+     {
+       "type": "menu",
+       "name": "Menu",
+       "settings": [
+         {
+           "type": "link_list",
+           "id": "custom_menu_linklist",
+           "label": "Menu"
+         }
+       ]
+     },
+     {
+       "type": "newsletter",
+       "name": "Newsletter sign up form",
+       "limit": 1,
+       "settings": [
+          {
+            "type": "richtext",
+            "id": "newsletter_richtext",
+            "label": "Text"
+          }
+       ]
+     },
+     {
+       "type": "page",
+       "name": "Page",
+       "settings": [
+         {
+           "type": "page",
+           "id": "content_page",
+           "label": "Page"
+         }
+       ]
+     },
+     {
+       "type": "recent_posts",
+       "name": "Recent blog posts",
+       "limit": 1
+     },
+     {
+       "type": "search",
+       "name": "Search form",
+       "limit": 1
+     },
+     {
+       "type": "text",
+       "name": "Text",
+       "settings": [
+         {
+           "type": "text",
+           "id": "title",
+           "label": "Heading",
+           "default": "Heading"
+         },
+         {
+           "type": "richtext",
+           "id": "text",
+           "label": "Text",
+           "default": "<p>Text area can be used for details about blog authors or general information.</p>"
+         }
+       ]
+     }
+   ]
+ }
+
+{% endschema %}
+<script>
+ 
+  $( document ).ready(function() {
+  $(".w3-button").click(function(){   
+    var id = $(this).attr('id');
+ 
+    if(id == 'productTemplateInfobtn'){
+      
+        $("#productTemplateInfobtn img").not('.noimages').addClass("replaceimages");
+          
+      if ($("#productTemplateInfobtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           $("#productTemplateInfobtn img").removeClass("replaceimages");
+        $("#productTemplateInfobtn img").addClass("noimages");
+      }else{  
+          $("#productTemplateInfobtn img").removeClass("noimages");
+           $("#productTemplateInfobtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           
+      }
+      
+    }
+    if(id == 'productTemplateFeaturebtn'){
+     
+          $("#productTemplateFeaturebtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateFeaturebtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateFeaturebtn img").removeClass("replaceimages");
+          $("#productTemplateFeaturebtn img").addClass("noimages");
+      }else{       
+          $("#productTemplateFeaturebtn img").removeClass("noimages");
+           $("#productTemplateFeaturebtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+      
+    }
+    if(id == 'productTemplateInforbtn'){
+      
+        $("#productTemplateInforbtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateInforbtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateInforbtn img").removeClass("replaceimages");
+         $("#productTemplateInforbtn img").addClass("noimages");
+      }else{       
+          $("#productTemplateInforbtn img").removeClass("noimages");
+           $("#productTemplateInforbtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+     
+    }
+    if(id == 'productTemplateBenefitbtn'){
+     
+        $("#productTemplateBenefitbtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateBenefitbtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateBenefitbtn img").removeClass("replaceimages");
+           $("#productTemplateBenefitbtn img").addClass("noimages");
+      }else{       
+           $("#productTemplateBenefitbtn img").removeClass("noimages");
+           $("#productTemplateBenefitbtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+     
+    }
+    if(id == 'productTemplateaccordionFivebtn'){
+     
+        $("#productTemplateaccordionFivebtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateaccordionFivebtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateaccordionFivebtn img").removeClass("replaceimages");
+           $("#productTemplateaccordionFivebtn img").addClass("noimages");
+      }else{       
+           $("#productTemplateaccordionFivebtn img").removeClass("noimages");
+           $("#productTemplateaccordionFivebtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+     
+    }
+    
+    if(id == 'productTemplateaccordionsixbtn'){
+     
+        $("#productTemplateaccordionsixbtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateaccordionsixbtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateaccordionsixbtn img").removeClass("replaceimages");
+           $("#productTemplateaccordionsixbtn img").addClass("noimages");
+      }else{       
+           $("#productTemplateaccordionsixbtn img").removeClass("noimages");
+           $("#productTemplateaccordionsixbtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+     
+    }
+    
+    if(id == 'productTemplateaccordionsevenBtn'){
+     
+        $("#productTemplateaccordionsevenBtn img").not('.noimages').addClass("replaceimages");
+           
+      if ($("#productTemplateaccordionsevenBtn img").hasClass("replaceimages")) {
+           $(".replaceimages").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+           $("#productTemplateaccordionsevenBtn img").removeClass("replaceimages");
+           $("#productTemplateaccordionsevenBtn img").addClass("noimages");
+      }else{       
+           $("#productTemplateaccordionsevenBtn img").removeClass("noimages");
+           $("#productTemplateaccordionsevenBtn img").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046");
+           
+      }
+     
+    }
+    
+}); 
+    
+    });
+function myFunction(id) {
+  var x = document.getElementById(id); 
+  
+  if (x.className.indexOf("w3-show") == -1) {
+      x.className += " w3-show";
+  } else {     
+    x.className = x.className.replace(" w3-show", "");    
+    
+    
+  }
+}
+    
+  $(window).scroll(function() {    
+    var scroll = $(window).scrollTop();
+
+     //>=, not <=
+    if (scroll >= 70) {
+        //clearHeader, not clearheader - caps H
+        $(".mobile_hidden .shopNow").addClass("shopNowShow");
+        $(".articleMenu").removeClass("articleMenus");
+        $(".shopNowButton").addClass("shopNowBtnhide");
+      
+    }else{
+      $(".mobile_hidden .shopNow").removeClass("shopNowShow");
+      $(".articleMenu").addClass("articleMenus");
+      $(".shopNowButton").removeClass("shopNowBtnhide");
+    }
+    if (scroll >800) {
+      //$(".mobileShopBtn").addClass("mobileSticky");
+    }else{
+     // $(".mobileShopBtn").removeClass("mobileSticky");
+    }
+}); //missing );
+</script>
+<style>
+  .shopNow{
+    display:none !important;
+  }
+  .shopNowShow{
+    display:block !important;
+  }
+  .articleMenus{
+    /*padding: 9px 0px !important;*/
+  }
+  .shopNowButton{
+    position:absolute;
+    right:0px;   
+    background-color:#2497a0;
+    color:#fff !important;
+    text-transform:uppercase;
+    padding:8px 10px;
+    border-radius:5px;
+    top:130px;
+    display:block;
+    line-height: 20px;
+font-size: 14px;
+  }
+  .shopNowShow{  
+     background-color:#2497a0 !important;
+    color:#fff !important;
+    text-transform:uppercase !important;
+    padding:8px 10px !important;
+    border-radius:5px !important;
+  }
+  #shopify-section-article-youtube-facade .container .twelve.columns {
+  width: 980px;
+    
+  }
+  #shopify-section-article-youtube-facade .article_name{
+  font-family: cubano,sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.5em;
+  margin-bottom: 10px;
+     padding:0px 10px;
+  }
+  #shopify-section-article-youtube-facade .articleDesc{
+    padding:0px 10px;
+    padding-bottom: 15px;
+    font-size: 16px;
+  }
+  .shopNowBtnhide{
+    display:none;
+  }
+  .articleTemplateSlide .main {
+  font-family:Arial;
+  width:500px;
+  display:block;
+  margin:0 auto;
+}
+ .articleTemplateSlide h3 {
+    background: #fff;
+    color: #3498db;
+    font-size: 36px;
+    line-height: 100px;
+    margin: 10px;
+    padding: 2%;
+    position: relative;
+    text-align: center;
+}
+.articleTemplateSlide .slider-nav div{
+    margin-right:10px;
+    height: 100%;
+  overflow:hidden;
+  height: 100px;
+}
+ .articleTemplateSlide .slick-next::before, .articleTemplateSlide .slick-prev::before {
+   color: #000 !important;
+ }
+  .articleTemplateSlide .slider-for .slick-track{
+    height:455px;
+  }
+  .articleTemplateSlide .slider-for .mediaWrapper{
+    height:100% !important;
+  }
+ .articleTemplateSlide iframe{
+   height: 100%; 
+   width:100%;
+ }
+ .articleTemplateSlide .slider-for img{
+   /* width:100%;*/
+   margin: 0px auto;
+ }
+.productTemplateAccord{
+    color: #55bdc5;
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-top: 1px solid #000;
+    border-radius: 0px;
+  background-color:#fff;
+}
+ 
+#productTemplateaccordionsevenBtn{
+    border-bottom: 1px solid #000;
+ }
+.productTemplateAccord:hover{
+    color: #ed588d !important;
+    background-color:transparent !important;
+  }
+.productTemplateBenefitbtn{
+  border-bottom: 1px solid #000;
+}
+.articleTemplateSlide .slider-nav img{
+   /* height:119px;*/
+     width: 100%;
+    cursor:pointer;
+}
+.productTemplateAccord img{
+   float: right;
+   width: 16px;
+   padding-top: 10px;
+}
+  #productTemplateaccordionFive img, #productTemplateaccordionsix img, #productTemplateBenefit img, #productTemplateInfo img, #productTemplateFeature img, #productTemplateInfor img {
+    
+    width: 50%;
+   display: block;
+  }
+  .articleTemplateContent .w3-container{
+    padding:10px 0px;
+    font-size:16px;
+  }
+  .mobileShopBtn{
+    display: none;
+    background-color: #2497a0;
+    color: #fff !important;
+    padding: 10px 0px;
+    text-align: center;
+   
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .mobileSticky{
+    position:fixed;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    z-index:9999;
+  }
+   
+  {% if totalSlides == 4 %}
+    .articleTemplateSlide .slider-nav div{
+      height:150px;
+    }
+  {% endif %}
+  {% if totalSlides == 3 %}
+    .articleTemplateSlide .slider-nav div{
+      height:165px;
+    }
+  {% endif %}
+  {% if totalSlides == 2 %}
+    .articleTemplateSlide .slider-nav div{
+      height:250px;
+    }
+  {% endif %}
+  
+  .articleTemplateSlide .slider-nav .slick-track .slick-slide {    
+    max-width: 154px;
+    max-height: 100px; 
+  }  
+  .productTemplateAccord h2{
+    display: inline-block;
+font: inherit;
+    padding: 0px;
+margin: 0px;
+  }
+
+@media screen and (max-width: 1024px) {
+  #shopify-section-article-youtube-facade .container .twelve.columns{
+    width:100%;
+    padding-left:0px;
+    margin:0px auto;
+  }
+  .articleTemplateSlide .slider-for .slick-track{
+    height:440px;
+  }
+  .articleTemplateSlide iframe {
+        height: 100%;  
+     
+  }
+  .articleTemplateSlide .slider-nav div{
+    height:120px;
+  }
+   #shopify-section-article-youtube-facade .slick-next, #shopify-section-article-youtube-facade .slick-prev{
+   z-index:999;
+ }
+}
+
+ @media screen and (max-width: 810px) {
+   .articleTemplateSlide .slider-nav img{
+   /* height:74px;*/
+  }
+   .articleTemplateSlide .slider-for .slick-track{
+      height:440px;
+    }
+   .shopNowButton {
+      position: fixed;
+     top: 0px;
+     right: 100px;
+    display: inline-block;
+    float: right;
+    z-index: 9999;
+   }
+   .articleTemplateSlide .slider-for img {
+     width: 100%;
+   }
+   .desktopshopNowBtn{
+     display:none;
+   }
+   .mobileShopBtn{
+     display:block;
+   }
+   
+  }
+@media screen and (max-width: 768px) {
+  .articleTemplateSlide .slider-for .slick-track{
+    height:240px;
+}
+  .articleTemplateSlide .slider-nav img {
+ /* height: 50px;*/
+}
+  .articleTemplateSlide .slider-for img {
+    width: 75%;
+  }
+  .articleTemplateSlide .slider-nav div{
+    height:50px;
+  }
+  #productTemplateaccordionFive img, #productTemplateaccordionsix img, #productTemplateBenefit img, #productTemplateInfo img, #productTemplateFeature img, #productTemplateInfor img {
+    
+    width: 100%;
+   display: block;
+  }
+}
+@media screen and (max-width: 767px) {
+   .articleTemplateSlide .slider-nav div{
+    height:70px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .shopNowButton {
+      right: 70px;
+    }
+  .articleTemplateSlide .slider-nav div{
+    height:70px;
+  }
+}
+@media screen and (max-width: 520px) {
+  .articleTemplateSlide .slider-nav img {
+    /* height: 74px;*/
+  }
+}
+@media screen and (max-width: 480px) {
+  #shopify-section-article-youtube-facade .container .twelve.columns{
+    width:100%;
+  }
+  .articleTemplateSlide .slider-nav img{
+    /*height:55px;*/
+  }
+ .articleTemplateSlide .slider-for .slick-track{
+    height:200px;
+  }
+ .productTemplateAccord{
+      font-size: 18px;
+    }
+  .shopNowButton {
+    margin-right:10px;  
+    }
+     .articleTemplateSlide .slider-for .slick-track{
+    height:200px;
+  }
+  .shopNowButton {
+    right: 55px;
+    top: 4px;
+    font-size: 10px;
+    padding:8px 5px;
+    }
+  .articleTemplateSlide .slider-for img {
+    width: 60%;
+  }
+   .articleTemplateSlide .slider-nav div{
+    height:135px;
+  }
+}
+@media screen and (max-width: 415px) {
+   .articleTemplateSlide .slider-for .slick-track{
+    height:170px;
+  }
+  .shopNowButton {
+    right: 40px;
+    
+    top: 10px;
+    font-size: 8px;
+    padding: 4px 4px;  
+  }
+  .articleTemplateSlide .slider-for img {
+    width: 75%; 
+  }
+  .articleTemplateSlide .slider-nav img{
+   /* height:100px;*/
+     margin: 0px auto;
+  }
+ .slick-next, .slick-prev{
+    z-index: 999;
+    top: 40%;
+  }
+}
+@media screen and (max-width: 376px) {
+  .shopNowButton {
+      right: 45px;
+      font-size: 7px;
+    line-height:7px;
+      padding: 6px 5px; 
+    top:10px;
+  }
+  .articleTemplateSlide .slider-nav img{
+   /* height:115px;*/
+  }
+ 
+}
+@media screen and (max-width: 320px) {
+ .slick-next{
+   right: -2px;
+   background-color:rgba(0,0,0,.4) !important;
+ }
+ .slick-prev{
+   left: 10px;
+   z-index: 9999;
+   background-color:rgba(0,0,0,.4);
+ }
+  .articleTemplateSlide .slider-for .slick-track{
+    height:200px;
+  }
+  .shopNowButton {
+  right: 38px;
+  font-size: 6px;
+  }
+  #header a.mobile_logo_inside{
+    left: -25px;
+  }
+}
+@media screen and (min-width: 1020px) {
+     #shopify-section-article-youtube-facade .container .four.columns{
+  width: 250px;
+}
+   }
+</style>
+<script>
+  $('.slider-for').slick({
+   slidesToShow: 1,
+   slidesToScroll: 1,
+   arrows: false,
+   fade: true,  
+   asNavFor: '.slider-nav'
+ });
+ $('.slider-nav').slick({
+   slidesToShow: {{ totalSlides }},
+   slidesToScroll: 1,
+   asNavFor: '.slider-for',   
+   arrows: true,
+   dots: false,
+   focusOnSelect: true,
+   responsive: [
+     {
+      breakpoint: 768,
+      settings: {
+        arrows: true,
+        centerMode: true,
+        centerPadding: '40px',
+        slidesToShow: 3
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        arrows: true,
+        centerMode: true,
+        centerPadding: '40px',
+        slidesToShow: 3
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        arrows: true,
+        centerMode: true,
+        centerPadding: '40px',
+        slidesToShow: 1
+      }
+    }
+  ]
+ });
+
+ $('a[data-slide]').click(function(e) {
+   e.preventDefault();
+   var slideno = $(this).data('slide');
+   $('.slider-nav').slick('slickGoTo', slideno - 1);
+ });
+ $('.articleTemplateSlide .slider-for').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+  var current = $(slick.$slides[currentSlide]);
+  current.html(current.html());
+}); 
+</script>

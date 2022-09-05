@@ -1,0 +1,532 @@
+{% if section.settings.blog-handler-name %}
+ {% comment %}
+    split blog category handler name with comma space
+ {% endcomment %}
+ {% assign handlerNames = section.settings.blog-handler-name | split: ', ' %}
+{% else %}
+  {% assign handlerNames = '' %}
+{% endif %}
+<div class="main_content_area content container blog-html-wrapper"> 
+
+  {% if section.settings.blog-title %}<h1>{{ section.settings.blog-title }}</h1>{% endif %}
+  <div class="sixteen clearfix">        
+        <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for handlerName in handlerNames %}{% if handlerName == blog.handle %} {% assign activeName = "active" %}{% else %}{% assign activeName = "" %}{% endif %}<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="{{ activeName }}"><a itemprop="item" href="{{ blogs[handlerName].url }}" title="{{ blogs[handlerName].title }}">{{ blogs[handlerName].title }}</a></li>{% endfor %}
+       </ul>
+    </div>
+  
+  <div class="sixteen clearfix rightSearchForm">
+    <div class="onesix searchFormDivRight">
+      <div class="firstDiv"><h1>Search Blog</h1></div>
+         <div class="secondDiv">
+                          
+              <span class="icon-search search-submit"></span>
+              <input class="enterText" type="text" placeholder="Search Fly Rides USA ..." value="" autocapitalize="none" autocomplete="off" autocorrect="off" data-gaconnector-tracked="true">
+     
+       </div>
+    </div>
+  </div> <!--rightSearchForm -->
+       {% assign blogLimit = 10 %}  
+       {% if current_page > 1 %}       
+          {% assign currentPage = current_page | minus: 1  %}
+          {% assign blogOffset = currentPage | times: blogLimit  %}  
+          {% assign firstblogOffset = blogOffset   %} 
+          {% assign blogCount = firstblogOffset %} 
+       {% else %}
+          {% assign blogOffset = 1 %}
+          {% assign firstblogOffset = 0 %}
+          {% assign blogCount = 0 %}
+       {% endif %}
+       {% assign allarticle = blog.articles %}
+   
+      <div class="row blogCategorySection">
+        <div class="col-sm-12">
+          <h2>{{ blogs[blog.handle].title }}</h2>
+        </div>
+      {% if allarticle.size > 0 %} 
+      {% paginate blog.articles by blogLimit  %}      
+        <div class="blogAllThreeDiv">
+          {% for article in allarticle limit: blogLimit offset: firstblogOffset  %}         
+              <!--define meta field -->
+               <meta name="keywords" itemprop="keywords" content="{{ article.tags }}" >
+              <meta name="author" itemprop="author" content="{{ article.author }}" >
+              <meta name="created_at" itemprop="dateCreated" content="{{ article.created_at | date: format: "month_day_year" }}" >
+              <meta name="updated_at" itemprop="dateModified" content="{{ article.updated_at | date: format: "month_day_year" }}" >
+              <meta name="published_at" itemprop="datePublished" content="{{ article.published_at | date: format: "month_day_year" }}" >
+              {% if blogCount == firstblogOffset %}
+                 <div class="blogFirstDiv" itemscope itemtype="https://schema.org/Article">
+                     <div class="col-sm-6 blogInformation">
+                        <a href="{{ article.url }}" itemprop="url">
+                          <h3 itemprop="name">{{ article.title | truncate: 50 }}</h3>
+                          <span class="blog-excerpt" itemprop="description">                           
+                            {% if article.excerpt != '' %}
+                               {{ article.excerpt | truncate: 150 }}
+                            {% else %}
+                               {{ article.content | truncate: 150 }}  
+                            {% endif %}
+                          </span>
+                          <span class="fullArticleLink">Full Article ></span>
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                      <a href="{{ article.url }}">
+                        <div class="blogFeatureImage" {% if article.image == null %} style="border:1px solid #000;" {% endif %} >
+                          {% if article.image ==  null %}
+                            <img itemprop="image" alt="{{ article.title }}" src="https://cdn.shopify.com/shopifycloud/shopify/assets/no-image-2048-5e88c1b20e087fb7bbe9a3771824e743c244f437e4f8ba93bbf7b11b53f7824c_555x350.gif" />
+                          {% else %}
+                         <img itemprop="image" src="{{ article.image | img_url: '555x350' }}" alt="{{ article.title }}">
+                          {% endif %}
+                       </div>
+                       </a>
+                    </div>
+                  </div>
+             {% else %} 
+               <div class="col-sm-4 bottomDistance" itemscope itemtype="https://schema.org/Article">
+                 <a href="{{ article.url }}" itemprop="url">
+                   <div class="blogImg" {% if article.image == null %} style="border:1px solid #000;" {% endif %}>
+                     {% if article.image ==  null %}
+                           <img itemprop="image" alt="{{ article.title }}" src="https://cdn.shopify.com/shopifycloud/shopify/assets/no-image-2048-5e88c1b20e087fb7bbe9a3771824e743c244f437e4f8ba93bbf7b11b53f7824c_555x350.gif" />
+                      {% else %}
+                          <img itemprop="image" src="{{ article.image | img_url: '360x245' }}" alt="{{ article.title }}"  />
+                     {% endif %}
+                   </div>
+                   <span class="blog-excerpt blogExcerpt" itemprop="name" >{{ article.title | truncate: 100 }}</span>
+                   
+                 </a>
+                </div><!--col-sm-4 -->            
+          {% endif %}
+          {% assign blogCount = blogCount | plus: 1 %}
+          {% endfor %}
+        </div>
+          <div class="col-sm-12">
+             <div class="blogPagination">
+               
+               {{ paginate | default_pagination: next: 'Next <i class="fa fa-angle-double-right"></i>', previous: '<i class="fa fa-angle-double-left"></i> Prev' }} 
+             </div>
+          </div>
+        
+        {% endpaginate %}
+        {% else %}
+        <h3 class="nopost">No blog posts available for this category</h3>
+        {% endif %}
+    </div> <!--blogCategorySection -->
+
+</div><!--main_content -->
+{% schema %}
+{
+  "name": "Blog Category",
+  "class": "blog-category",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Blog Handler Name"
+    },
+    {
+      "type": "text",
+      "id": "blog-title",
+      "label": "Blog title"
+    },
+    {
+      "type": "textarea",
+      "id": "blog-handler-name",
+      "label": "Handler Name With Comma"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .blog-html-wrapper h1{
+    color: #55bdc5;
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .blog-html-wrapper h3{
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .header .container{
+    /*display:none;*/
+   
+  }
+  .nopost{
+    text-align:center;
+        margin-top: 50px;
+    width: 100%;
+    display: block;
+    float: left;
+  }
+  .blog-html-wrapper ul{
+    margin:0px;
+    padding:0px;
+    display:block;
+    width:100%;
+    border: 1px solid #55bdc5;
+    background-color: #000;
+  }
+  .blog-html-wrapper ul li{
+    display:inline-block;
+    padding: 10px 0px;
+    background-color: #192b49;
+    margin: 0px;
+    width: 20%;
+    text-align:center;
+    border-right: 1px solid #55bdc5;
+  }
+  .blog-html-wrapper ul li:last-child{
+    border-right:0px;
+  }
+  .blog-html-wrapper ul li:hover{
+    background-color: #ed588d;
+    
+  }
+  .blog-html-wrapper ul li:hover a{
+    color: #fff;
+  }
+  .blog-html-wrapper ul li a{
+    color:#fff;
+    font-size: 26px;
+    display:block;
+    text-decoration:none;
+  }
+  .rightSearchForm .onesix{
+    width:50%;
+  }
+  .rightSearchForm h1{
+    padding: 20px 0px;
+    font-family: cubano, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.5em;   
+    clear: both;
+    color: #55bdc5;
+    display: block;
+    letter-spacing: 1px;
+    text-rendering: optimizeLegibility;
+    margin-bottom: 0px;
+  }
+  .searchFormDivRight{
+    float:right;
+    display:inline-block;  
+  }
+  .firstDiv{
+    width:35%;
+    float: left;
+display: block;
+  }
+  .secondDiv{
+    width:65%;
+    display: inline-block;
+  }
+  .secondDiv input[type=text]{
+    border-color:#55bdc5;
+  }
+  .secondDiv .icon-search{
+    color:#55bdc5;
+    top: 42px;
+    right: 5px;
+  }
+  .blogCategorySection h2{
+    text-transform: uppercase;
+    font-size: 64px;
+    font-family: cubano, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: #55bdc5;
+    margin-top: 0px;
+  }
+  .blogFirstDiv{
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+    float: left;
+  }
+  .secondDiv form{
+    margin-bottom:0px;
+  }
+  .blogInformation{
+    padding-top:30px;
+  }
+  .blogInformation a{
+    display:block;
+  }
+  .blogFeatureImage{
+    height:350px;
+    width:100%;
+    display:block;
+    overflow:hidden;
+  }
+  .blogFeatureImage img{
+    /*height:100%;*/
+    width:100%;
+  }
+  .blogCategorySection h2 a{
+    color: #55bdc5;
+    text-decoration:none;
+  }
+  .blogCategorySection h3{
+    line-height: 35px;
+    font-weight: 900;
+    font-size:32px;
+    color:#1c2d4b;
+  }
+  .blog-excerpt{
+   font-size: 20px;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 26px;
+    color:#1c2d4b;  
+    line-height: 22px;
+    width:100%;
+  }
+  .blogExcerpt{
+    height:65px;
+  }
+  .blogInformation a{
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration:none;
+        color: #1c2d4b;
+  }
+  .blogCategorySection img{
+     width:100%; 
+  }
+  .fullArticleLink{
+    color: #55bdc5;
+    font-weight: 700;
+    font-size:20px;
+    display:block;
+    margin-top: 20px;
+  }
+ .blogAllThreeDiv .blogImg{
+    width:100%;
+    height:245px;
+    display: block;
+    width: 100%;
+    overflow:hide;
+  }
+  .blogAllThreeDiv .blogImg img{
+    width:100%;
+   /* height:100%;*/
+  } 
+  .blogAllThreeDiv{
+    width: 100%;
+    display: block;
+    padding-top: 30px;
+    float:left;
+  }
+   .blogAllThreeDiv a{
+    text-decoration:none;
+  }
+  .blogPagination{
+    display:block;
+    width:100%;
+    text-align: center;
+  }
+  .blogPagination .current{
+    border: 1px solid #192b49;
+    padding: 8px 8px;
+    background-color:#55bdc5;
+    font-size: 18px;
+  }
+  .blogPagination a{
+    border: 1px solid #000;
+    padding: 8px 8px;
+    text-decoration:none;
+    font-size: 18px;
+  }
+  .blog-html-wrapper .active{
+    background-color: #ed588d;
+  }
+  .bottomDistance{
+    margin-bottom:30px;
+  }
+  .sparq-layout{
+  display:none !important; 
+ }
+   @media screen and (max-width: 1024px) {
+     .rightSearchForm .onesix{
+       width: 100%;
+     }
+     .blogAllThreeDiv .blogImg{
+    height:180px;
+  }
+     .blog-html-wrapper ul li a{
+           font-size: 20px;
+     }
+   }
+  @media screen and (max-width: 900px) {
+    .blog-html-wrapper ul li a{
+      font-size:20px;
+    }
+  }
+  
+  @media screen and (min-width: 1200px) {
+    .sub-footer .container{
+     width: 1200px;
+    }
+  
+  }
+  @media screen and (min-width: 1320px) {
+  .header .container{
+    
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+  }
+   @media screen and (min-width: 1024px) {
+    .sub-footer .container{
+     width: 1200px;
+    }
+  
+  }
+  @media only screen and (min-width: 960px) and (max-width: 1199px){
+    .sub-footer .container{
+      width: 960px;
+     }   
+  }
+  @media only screen and (min-width: 799px) and (max-width: 959px){
+   .sub-footer .container {
+        width: 768px;
+    }
+  }
+  @media only screen and (min-width: 480px) and (max-width: 798px){
+    .sub-footer  .container {
+          width: 420px;
+      }
+  }
+  @media only screen and (max-width: 960px){
+   .blogExcerpt {
+        height: 125px;
+    }
+  }
+  @media only screen and (max-width: 798px){
+   .sub-footer .container {
+       width: 300px;
+
+    }
+    .blogCategorySection h3{
+      font-size: 28px;
+    }
+    .blogCategorySection h2{
+      font-size: 56px;
+    }
+  } 
+  @media only screen and (max-width: 768px){
+     .blog-html-wrapper ul li{
+       width: 50%;
+       border-bottom: 1px solid #55bdc5;
+     }
+    .blog-html-wrapper ul li:nth-child(2), .blog-html-wrapper ul li:nth-child(4){
+      border-right:0px;
+    }
+    .blog-html-wrapper ul li:last-child{
+       border-bottom: 0px;
+      border-right:0px;
+      width:100%;
+    }
+    .blog-html-wrapper ul li:hover{
+      border-right:0px;
+    }
+    .firstDiv, .secondDiv{
+      width:100%;
+    }
+    .rightSearchForm h1{
+      padding-bottom:0px;
+      margin-bottom:0px;
+    }
+    .blogFeatureImage, .blogAllThreeDiv .blogImg{
+      height:100%;      
+    }
+    .blogInformation {    
+      padding-bottom: 30px;
+    }
+    .blogExcerpt {
+    height: 100px;
+     }
+   
+    
+  } 
+  @media only screen and (max-width: 767px){
+    .blogFirstDiv{
+       float:none;
+     }
+     .blogExcerpt {
+       height: 100%;
+    }
+     .sub-footer .four{
+       width:100% !important;
+     }
+    .blogInformation{
+       padding-top:0px;
+     }
+    .blog-html-wrapper{
+       padding-top:20px !important; 
+    }
+    .secondDiv form{
+      margin-top: -20px;
+    }
+    .blogCategorySection h2{
+        margin-top: 20px;
+    }
+    .blogAllThreeDiv{
+      padding-top:0px;
+    }
+    .blogPagination{
+      margin-top: 30px;
+      float:left;
+    }
+  }
+   @media only screen and (max-width: 600px){
+     .blogAllThreeDiv{
+       padding-top: 0px;
+     }
+    .blog-html-wrapper h1{
+          font-size: 22px;
+    }
+   }
+  @media only screen and (max-width: 420px){
+     .blog-html-wrapper h3{
+      font-size: 20px;
+    }
+    .blog-html-wrapper h1{
+      font-size: 20px;
+    }
+    .blog-html-wrapper ul li{
+       width: 100%;
+      border-right:0px;
+    }
+    .blogCategorySection h2 {
+       font-size: 44px;
+     }
+    .blogCategorySection h3 {
+      font-size: 26px;
+     }
+   .blogPagination a, .blogPagination .current{
+      font-size: 16px;
+   }
+    
+  }
+</style>
+<script>  
+ $( document ).ready(function() {
+   var base_url = window.location.origin;
+  $(document).on("keydown", ".secondDiv .enterText", function(event) { 
+ 
+    var fullString = $(".enterText").val(); 
+    if(event.key != "Enter"){
+    }else{
+     // alert(event.key);
+      window.location.href = base_url+"/search?type=article&q="+fullString;       
+    }
+  
+});
+  $(document).on("click", ".secondDiv .search-submit", function(event) {
+    var fullString = $(".enterText").val();
+    window.location.href = base_url+"/search?type=article&q="+fullString;
+  });
+});
+</script>

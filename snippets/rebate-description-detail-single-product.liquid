@@ -1,0 +1,182 @@
+<button class="accordion rebateDetailbtn" id="rebatePanel"><span class="rebateTitle">REBATE DETAILS</span><span>
+  <img src="https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046" class="rebateimg"></span></button>
+      <div class="panel rebatePanel" >
+            <br/>
+            <p>There is no better way to lift up our emotional, mental, and physical well-being than by getting out on our bikes, especially with a buddy or partner! 
+          </p>
+            <p>We're rewarding you for sharing your stoke and spreading the word to others who might be pumped to get their own eSteed.</p>
+
+            <h3> Here's how it works:</h3>
+            <ul>
+             <li>When you add your bike to the cart, we'll automatically add a rebate coupon also.</li>
+              <li>We'll issue your rebate once you do the following steps:</li>
+                  <ol>
+                    <li>Post a pic or video on Facebook or Instagram of you and your new bike out in the wild, and tag <strong>@flyridesusa</strong> and use <strong>#emtblife</strong> and inspire your friends & family to join the eBike lifestyle!</li>
+                    <li>Next, join and then post using the same pic or video on one of these eBike Facebook groups:  </li>
+                      <ol>
+                        <li><a href="https://www.facebook.com/groups/emtbforums" target="_blank">EMTB FORUMS</a></li>
+                        <li><a href="https://www.facebook.com/groups/1839239892960001" target="_blank">SoCal eMTB Group</a>
+                            <ul>
+                              <li> <strong>IMPORTANT:</strong> Do <strong>not</strong> tag @flyridesusa on your Facebook group post.</li>
+                            </ul>
+                        </li>
+                      </ol>
+                    <li>Make the posts within 30 days of receiving your bike, and shoot an email to <a href="mail:rebates@flyridesusa.com">rebates@flyridesusa.com</a> with screenshots of your two posts.  You'll get your rebate within 3 business days!</li>
+                  </ol>
+           </ul>
+       </div>
+
+<style>
+ 
+.rebateTitle {
+    font-size: 27px;
+font-family: cubano,sans-serif;
+font-style: normal;
+font-weight: 400;
+    
+  }
+.rebateDetailbtn span{
+ display:inline-block; 
+}
+.rebateDetailbtn span img{
+   width:14px; 
+  margin-left: 30px;
+  }
+.rebateDetailbtn { 
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  color: #55bdc5;
+  border-top: 1px solid #55bdc5;
+  border-bottom: 1px solid #55bdc5;
+  background-color: transparent;
+}
+
+.rebateDetailbtn.active, .rebateDetailbtn:hover {
+    background-color: transparent;
+  color:#ed588d;
+}
+
+.rebatePanel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+}
+.rebateaccordion{
+  display: block;
+  width: 100%;
+  background-color: transparent;  
+  text-align: left;
+  padding: 0px;
+  line-height:27px;
+  height: auto;
+  min-height: auto;
+  margin: 20px 0px;
+  color: #55bdc5;
+  font-weight: bold;
+  float:left;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom:15px;
+  
+  }
+.rebateaccordion:hover{
+  padding: 0px; 
+  background-color: transparent;
+  color: #ed588d;
+  line-height:27px;
+  
+}
+.rebateaccordion:active, .rebateaccordion:hover, .rebateaccordion:click{
+  color: #55bdc5 !important;
+}
+.singleProductPageRebatePrice{
+  font-size: 18px !important;
+  line-height: 26px;
+  display: block;
+   color: #ed588d;
+}
+.singleProductBadge{
+position: absolute;
+padding: 5px;
+background-color: #ed588d;
+top: 0px;
+left: 0px;
+z-index: 5;
+font-size: 16px;
+line-height: 16px;
+  color:#fff;
+}
+#shopify-section-product-details-template  .description iframe{
+    width:100% !important;
+  }
+.rebalteSinglePrice .money{
+    color: #000 !important;
+  }
+.compareRebatePrice .money{
+  color:#ed588d !important;
+}
+@media screen and (max-width: 1024px) {
+  
+   
+}
+  
+@media screen and (max-width: 768px) {
+  /*p.modal_price, .singleProductPageRebatePrice{
+   font-size: 14px !important; 
+  }
+  */
+ 
+}
+@media screen and (max-width: 520px) {
+   /*p.modal_price, .singleProductPageRebatePrice{
+   font-size: 12px !important; 
+  }*/
+  .rebateaccordion{
+    font-size: 16px;
+  }
+  
+}
+
+@media screen and (max-width: 420px) {
+  .rebateaccordion{
+    font-size:16px !important;
+  }
+  
+  
+}
+</style>
+<script>
+var acc = document.getElementsByClassName("rebateDetailbtn");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    var imgReplace = document.getElementsByClassName("rebateimg")[0];
+    if(panel.style.display === "block") {
+      panel.style.display = "none";
+      imgReplace.src = "https://cdn.shopify.com/s/files/1/0612/4905/files/plus_1.png?v=1642488046";
+    } else {
+      panel.style.display = "block";      
+      imgReplace.src = "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471";
+    }
+  });
+}
+  
+
+jQuery( ".rebateaccordion" ).click(function() {
+  
+   jQuery(".rebatePanel").css("display", "block");
+   jQuery(".rebateDetailbtn ").addClass("active");
+   jQuery(".rebateDetailbtn  .rebateimg").attr("src", "https://cdn.shopify.com/s/files/1/0612/4905/files/minus_1.png?v=1642488471");
+   
+});
+// setTimeout(function() { jQuery(".singleProductBadge").hide(); }, 10000);
+</script>

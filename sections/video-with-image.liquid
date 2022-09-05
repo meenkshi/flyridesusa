@@ -1,0 +1,131 @@
+<div class="video_section">
+  
+  <h2>{{ section.settings.title }}</h2>
+  
+  <div class="videoo">
+    {{ section.settings.video }}
+  </div>
+  
+  <div class="ctas">
+    <h3>{{ section.settings.ctatitle }}</h3>
+    <a class="action_button" href="{{ section.settings.ctalink }}">{{ section.settings.button }}</a>
+  </div>
+  
+  <div class="last desktopara">
+    <img src="{{ section.settings.image | img_url: 'master'}}">
+    <div class="textara">
+    <p>{{ section.settings.tele }}<span id="dots">...<a onclick="myFunction()" id="myBtn">Read more</a></span><span id="more">{{ section.settings.tele_ling }}<a onclick="myFunction()" id="myBtn">Read less</a></span></p>
+      
+    </div>
+  </div>
+  
+  <div class="last mobara">
+    <img src="{{ section.settings.image | img_url: 'master'}}">
+    <div class="textara">
+    <p>{{ section.settings.telem }}<span id="dotss">...<a onclick="myFunctionn()" id="myBtns">Read more</a></span><span id="mores">{{ section.settings.tele_lingm }}<a onclick="myFunctionn()" id="myBtns">Read less</a></span></p>
+      
+    </div>
+  </div>
+  
+</div>
+
+<script>
+function myFunction() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("myBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more"; 
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less"; 
+    moreText.style.display = "inline";
+  }
+}
+</script>
+
+<script>
+function myFunctionn() {
+  var dots = document.getElementById("dotss");
+  var moreText = document.getElementById("mores");
+  var btnText = document.getElementById("myBtns");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more"; 
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less"; 
+    moreText.style.display = "inline";
+  }
+}
+</script>
+
+{% schema %}
+  {
+    "name": "Video With Image",
+    "settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Title"
+},
+     {
+"type": "html",
+"id": "video",
+"label": "Embed Video"
+},
+{
+"type": "text",
+"id": "ctatitle",
+"label": "CTA title"
+},
+{
+"type": "url",
+"id": "ctalink",
+"label": "CTA link"
+},
+{
+"type": "text",
+"id": "button",
+"label": "CTA Label"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "text",
+"id": "tele",
+"label": "Text Short"
+},
+{
+"type": "text",
+"id": "tele_ling",
+"label": "Text Long"
+},
+{
+"type": "text",
+"id": "telem",
+"label": "Text Short Mobile"
+},
+{
+"type": "text",
+"id": "tele_lingm",
+"label": "Text Long Mobile"
+}
+     
+    ],
+    "presets": [
+      {
+        "name": "Video With Image",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}

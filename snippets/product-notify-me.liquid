@@ -1,0 +1,47 @@
+{% if settings.notify_me_form %}
+  <div class="notify_form notify-form-{{ product.id }}" id="notify-form-{{ product.id }}" {% if product.available %}style="display:none"{% endif %}>
+    <p class="message"></p>
+    {% form 'contact', id: "notify_me" %}
+      {% if form.errors %}
+        <p><em>{{ 'products.notify_form.post_error' | t }}</em></p>
+      {% else %}
+        <p>
+          <label aria-hidden="true" class="visuallyhidden" for="contact[email]">{{ 'products.notify_form.description' | t }}:</label>
+
+          {% if settings.notify_me_description %}
+            {{ settings.notify_me_description }}
+          {% endif %}
+          <div class="notify_form__inputs {% if customer %}customer--true{% endif %}"  data-body="{{ 'products.notify_form.message_content' | t: product: product.title, url: canonical_url }}">
+            {% if product.variants.size >= 1 and product.available == false %}
+              {% if customer %}
+                <input type="hidden" name="contact[email]" class="notify_email" id="contact[email]" value="{{ customer.email }}" />
+            
+            
+			
+		{% comment %}	{% endcomment %}
+            
+            
+            
+            {% else %}
+                <input required type="email" class="notify_email" name="contact[email]" id="contact[email]" placeholder="{{ 'products.notify_form.email' | t }}" value="{{ contact.fields.email }}" />
+            
+         {% comment %}
+            <div>
+  			{% assign name_attr = 'contact.form.phone' | t | handle %}
+ 			 <label for="contactFormPhone" class="hidden-label">{{ 'contact.form.phone' | t }}</label>
+		 	 <input type="tel" id="contactFormPhone" name="contact[{{ name_attr }}]" placeholder="{{ 'contact.form.phone' | t }}" pattern="[0-9\-]*" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+			</div>
+         {% endcomment %}
+            
+              {% endif %}
+
+              <input type="hidden" name="challenge" value="false" />
+              <input type="hidden" name="contact[body]" class="notify_form_message" data-body="{{ 'products.notify_form.message_content' | t: product: product.title, url: canonical_url }}" value="{{ 'products.notify_form.message_content' | t: product: product.title, url: canonical_url }}" />
+              <input class="action_button" type="submit" value="{{ 'products.notify_form.send' | t }}" style="margin-bottom:0px" />
+            {% endif %}
+          </div>
+        </p>
+      {% endif %}
+    {% endform %}
+  </div>
+{% endif %}

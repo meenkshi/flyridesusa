@@ -1,0 +1,66 @@
+{% if type == 'block' %}
+  {% assign image = block.settings.image %}
+  {% assign title = block.settings.title %}
+  {% assign content = block.settings.content %}
+  {% assign text_size = block.settings.text_size %}
+  {% assign text_alignment = block.settings.text_alignment %}
+  {% assign button_label = block.settings.button_label %}
+  {% assign button_link = block.settings.button_link %}
+  {% assign wide_display = block.settings.wide_display %}
+{% else %}
+  {% assign image = section.settings.image %}
+  {% assign title = section.settings.title %}
+  {% assign content = section.settings.content %}
+  {% assign text_size = section.settings.text_size %}
+  {% assign text_alignment = section.settings.text_alignment %}
+  {% assign button_label = section.settings.button_label %}
+  {% assign button_link = section.settings.button_link %}
+  {% assign wide_display = section.settings.wide_display %}
+{% endif %}
+
+<div class="homepage_content wide_display--{{ wide_display }} clearfix">
+  <div class="container">
+    <div class="sixteen columns">
+      <div class="section {{ text_alignment }} clearfix">
+        {% if image %}
+          <figure class="rich_text__image">
+            <img  class="lazyload lazyload--fade-in"
+                  alt="{{ image.alt }}"
+                  data-sizes="auto"
+                  data-aspectratio="{{ image.width }}/{{ image.height }}"
+                  data-src="{{ image | img_url: '2048x' }}"
+                  data-srcset=" {{ image | img_url: '2048x' }} 2048w,
+                                {{ image | img_url: '1600x' }} 1600w,
+                                {{ image | img_url: '1200x' }} 1200w,
+                                {{ image | img_url: '1000x' }} 1000w,
+                                {{ image | img_url: '800x' }} 800w,
+                                {{ image | img_url: '600x' }} 600w,
+                                {{ image | img_url: '400x' }} 400w"
+                  />
+            <noscript>
+              <img src="{{ image | img_url: '2048x' }}" alt="{{ image.alt | escape }}">
+            </noscript>
+          </figure>
+        {% endif %}
+
+        {% if title != blank %}
+          <h2 class="title">
+            {{ title | escape }}
+          </h2>
+        {% endif %}
+
+        <div class="{{ text_size }}">
+          {% if content != blank %}
+            {{ content }}
+          {% endif %}
+
+          {% if button_label != blank and button_link != blank %}
+            <a class="action_button" href="{{ button_link }}">
+              {{ button_label | escape }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

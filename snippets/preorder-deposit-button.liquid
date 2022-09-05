@@ -1,0 +1,163 @@
+
+{% assign productId = product.id %}
+{% assign productTitle = product.title %}
+{% assign variantId = variant.id %}
+{% assign variantTitle = variant.title %}
+<!--APPLIED CONDITION TEMPLATE WISE fR-157TASK -->
+{% if template.suffix != 'rieseandmuller' %}
+<ul class="outer_section_ka">
+   
+  <li><input type="radio" class="comman_redio_btn" id="ka_reserve" name="forshowingsection" value="reserve" checked><span class="checkmark"></span> <label for="ka_reserve">Reserve This Ebike</label></li>
+
+ 
+  {% if variant.inventory_quantity <= 0 and variant.inventory_policy != "continue" %}
+  <li><input type="radio" class="comman_redio_btn" id="ka_notify" name="forshowingsection" value="notify"><span class="checkmark"></span> <label for="ka_notify">Notify Me When Available</label></li>
+  {% endif %}
+
+  <li><input type="radio" class="comman_redio_btn" id="ka_callus" name="forshowingsection" value="callus"  ><span class="checkmark"></span> <label for="ka_callus">Call Now</label></li>
+
+</ul>
+ 
+
+<div class="reserve_btn_section">
+<button id="AddToCart" 
+        type="{% if settings.cart_action == 'ajax' %} button {% else %} submit {% endif %}" 
+        name="add" class="{% if settings.cart_action == 'ajax' %} ajax-submit {% endif %} preorder-button custom_btn_cart" 
+        data-label="RESERVE THIS EBIKE" 
+        data-proid='{{ productTitle | escape }}' 
+        data-vid='{{ variantTitle | escape }}' >
+<span class="text">RESERVE THIS EBIKE</span>
+</button>
+  <div class="selector-wrapper reserve-product-text">
+      <br>
+     <p><strong>Due to increased demand for eBikes, inventory is super limited!
+
+    With a $300 deposit, we’ll save your place in line for our next shipment.</strong></p>
+    <ul>
+    <li><strong>When we receive the bike, we’ll confirm that you still want it.</strong></li>
+
+    <li><strong>If not, you can transfer your deposit to another model.</strong></li>     
+          
+    </ul>         
+</div> 
+
+ <script type="text/javascript"> 
+   setTimeout(function() {
+  $(".custom_btn_cart").removeClass("disabled");
+  $(".custom_btn_cart").prop("disabled", false); 
+  $(".custom_btn_cart span.text").text("RESERVE THIS EBIKE"); 
+  $(".reserve_btn_section").removeClass("disabled");
+  $(".reserve_btn_section").prop("disabled", false);
+  $(".reserve_btn_section").attr('value', 'RESERVE THIS EBIKE');
+  
+  }, 3000);  
+  </script>   
+</div>
+{% endif %}  
+{% if variant.inventory_quantity <= 0 and variant.inventory_policy != "continue" %}
+<div class="notify_frm_section" style="display:none;">
+<a class="klaviyo-bis-trigger btn button" href="" style="display:block !important;">Yes, Notify Me!</a>
+</div>
+{% endif %}
+<!--APPLIED CONDITION TEMPLATE WISE fR-157TASK -->
+ {% if template.suffix != 'rieseandmuller' %}
+<div class="callus_section" style="display:none;">
+ <p>To speak to an expert about what's available now, call or text us at <a class="callusnum" href="tel:6193440211">(619) 344-0211</a>, or:</p>
+<!--<a class="button" href="javascript:void(0)" onclick="Calendly.showPopupWidget('https://calendly.com/flyrides/call-with-an-ebike-expert');return false;" style="width:100%">SCHEDULE A CALL</a>
+-->
+  <div class="popup-btn">
+<!-- Change the text below to what you need it to be -->
+  <a class="button" href="javascript:void(0)" style="width:100%;">SCHEDULE A CALL</a>  
+</div>
+<div class="popup-overlay">
+<div class="popup">
+
+          <!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/flyrides/call-with-an-ebike-expert" style="min-width:320px;width:100%;height:1000px;"></div>
+
+<!-- Calendly inline widget end -->
+<span class="popup-close"></span>
+</div>
+
+</div>
+</div>  
+{% endif %}
+<!--APPLIED CONDITION TEMPLATE WISE fR-157TASK -->
+ {% if template.suffix == 'rieseandmuller' %}
+<div class="callus_section" style="display:block;padding-top: 20px;">
+  
+  <div class="popup-btn">
+<!-- Change the text below to what you need it to be -->
+  <a class="button" href="javascript:void(0)" style="width:100%;">SCHEDULE A CALL</a>  
+</div>
+<div class="popup-overlay">
+<div class="popup">
+
+          <!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget" data-url="https://calendly.com/flyrides/call-with-an-ebike-expert" style="min-width:320px;width:100%;height:1000px;"></div>
+
+<!-- Calendly inline widget end -->
+<span class="popup-close"></span>
+</div>
+
+</div>
+</div>  
+{% endif %}
+<!-- Coded by jotting.com -->
+{{ 'popup.js' | asset_url | script_tag }}
+<style>
+ul.outer_section_ka {
+    padding: 0;
+    margin-left: 0;
+    width:100%;
+}
+.outer_section_ka li {
+    list-style: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    float:left;
+    margin-right:5px;
+}
+.outer_section_ka li label {
+    display: inline-block;
+    font-size: 17px;
+    font-weight: 500;
+}  
+.reserve_btn_section{ width:100%}
+.notify_frm_section { width:100%;}
+.callus_section{width:100%;}  
+a.button{padding:4px 20px}
+  .custom_btn_cart{width:100%;}
+  .popup-btn a.button {
+    padding: 5px 20px;
+}
+</style>
+
+
+<script type="text/javascript"> 
+  
+$('.comman_redio_btn').change(function() {
+    if (this.value == 'reserve') {
+      $('.reserve_btn_section').css('display','block');
+      $('.notify_frm_section').css('display','none');
+      $('.callus_section').css('display','none');
+    }
+    if (this.value == 'notify') {
+      $('.reserve_btn_section').css('display','none');
+      $('.notify_frm_section').css('display','block');
+      $('.callus_section').css('display','none');
+    }
+    if (this.value == 'callus') {
+       $('.reserve_btn_section').css('display','none');
+      $('.notify_frm_section').css('display','none');
+      $('.callus_section').css('display','block');
+    }
+});
+  
+</script>
+<!-- Calendly link widget begin -->
+<link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
+<!-- Calendly link widget end -->
+ 

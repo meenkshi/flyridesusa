@@ -1,0 +1,270 @@
+{% comment %}
+Comment on 6-05-2022
+{% assign currentProductQtn = product.selected_or_first_available_variant.inventory_quantity %}
+{% assign count = 0 %}
+{% assign product_qty = 0 %}
+{% for variant in product.variants %}
+  {% if variant.inventory_quantity > 0 %}
+    {% assign product_qty = product_qty | plus: variant.inventory_quantity %}
+    
+    {% if count == 0 and product.selected_or_first_available_variant.inventory_quantity == 0 %}
+     {% assign varaintAvailable = variant.id %}
+    {% endif %}
+     {% assign count = count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+{% endcomment %}
+
+
+  {% if section.settings.show_payment_button %}
+    {% assign show_payment_button = true %}
+  {% elsif show_payment_button_quickshop %}
+    {% assign show_payment_button = true %}
+  {% else %}
+    {% assign show_payment_button = false %}
+  {% endif %}
+
+  {% assign variant = product.selected_or_first_available_variant %}
+  {% include 'size-chart-popup' %}
+    <div style="height:35px;">
+          <span class="affirmmsg"></span>
+         </div>
+<!-- preorder -->
+
+      {% include 'preorder-deposit-button-soldout' with 'product' %}
+
+	{% assign sizeOption = false %}
+	{% assign styleOption = false %}
+   {% for product_option in product.options_with_values %} 
+     
+            {% if product_option.name == 'Model Year' %} 
+               {% assign modelCurrentValue = product_option.selected_value %}
+
+            {% endif %}
+            {% if product_option.name == 'Size' %}
+			   {% assign sizeOption = true %}
+               {% assign sizeOrstyleCurrentValue = product_option.selected_value %}
+
+{% endif %}
+			{% if product_option.name == 'Style' %}
+				{% assign styleOption = true %}
+				{% assign sizeOrstyleCurrentValue = product_option.selected_value %}
+            {% endif %} 
+             {% if product_option.name == 'Color' %}
+               {% assign colorCurrentValue = product_option.selected_value %}  
+
+            {% endif %} 
+            {% if product_option.name == 'Style' %}
+               {% assign styleCurrentValue = product_option.selected_value %}  
+            {% endif %} 
+   {% endfor %}
+         {% assign fullCompareString1 = modelCurrentValue %}
+         {% assign fullCompareString2 = sizeOrstyleCurrentValue %}
+
+
+
+<script>
+(function($){
+    $(document).ready(function(e){
+      var origin   = window.location.origin;  
+      if(origin.indexOf('shopifypreview') == -1){       
+          var url = new URL(location.href);
+          var params = new URLSearchParams(url.search);
+          var show_top_flag = params.get('variant');
+        
+              if ( show_top_flag == null || show_top_flag == '') {
+                
+               var Allvarientquanity = [];
+               var Allvarientcheck = [];
+               var Allvarientid = [];
+                
+               {% for v in product.variants %}
+                
+               {% assign variantid = v.id %}
+               {% assign variantqt = v.inventory_quantity %} 
+               {% assign variantck = v.inventory_policy %} 
+                
+               var variantid = "{{ variantid }}";
+               var variantqt = "{{ variantqt }}";
+               var variantck = "{{ variantck }}";  
+               
+               Allvarientquanity.push(variantqt);
+               Allvarientcheck.push(variantck);
+               Allvarientid.push(variantid);
+                
+               {% endfor %}
+             
+              
+              var quntitynotzero = (element) => element > 0;
+              var checkquntityindex = Allvarientquanity.findIndex(quntitynotzero);  
+              var checkissellindex = Allvarientcheck.findIndex(Allvarientcheck => Allvarientcheck === "continue");
+
+              if(checkquntityindex != -1){
+                 var mainid = Allvarientid[checkquntityindex];
+              }  
+               
+              if(checkquntityindex == -1 && checkissellindex != -1){
+                 var mainid = Allvarientid[checkissellindex];
+              } 
+                
+              if(checkquntityindex == -1 && checkissellindex == -1){
+               var mainid = Allvarientid[0]; 
+              }
+                
+             if(show_top_flag == '') {
+              var mainurl = url+''+mainid
+              window.top.location.href = mainurl 
+              }
+              if(show_top_flag == null){ 
+              var mainurl = url+'?variant='+mainid
+              window.top.location.href = mainurl 
+              }             
+        }
+     }
+      
+});
+})(jQuery);
+
+</script>
+<!-- Calendly link widget begin -->
+<link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
+<!-- Calendly link widget end -->
+<style>
+  .colorOption{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+  }
+   .colorOption li{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+    display:inline-block;
+  }
+  .colorOption li{
+    margin:0px;
+    list-style-type:none;
+    padding:0px;
+    display:inline-block;
+    width:70px;
+    height:50px;
+    border:1px solid #55bdc5;
+    margin-right:5px;
+    cursor:pointer;
+    border-radius: 5px;
+    padding: 1px;
+  }
+  .colorOption li:last-child{
+    margin-right:0px;
+  }
+  .selectedColorName{
+    border:2px solid #192b49 !important;
+  }
+  .colorOption li span{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    float:left;
+    text-align:center;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .flex-control-thumbs li{
+    margin-right: 10px;
+    
+   
+  }
+  
+  .flex-control-thumbs li .flex-active{ 
+    border:1px solid #ed588d;
+  }
+  .availableImg{
+    cursor: not-allowed;
+    position:relative; 
+  }
+   .availableImg .crossover{
+    /*width:50px;*/
+  }
+  .availableImg .crossoverpos{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /*width:50px;*/
+    margin: 0px auto;
+  }
+  .popup {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 50px 30px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+  position: absolute;
+  z-index: 25;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80% !important;
+  display: none;
+  width: 80%;
+  max-height: 450px !important;
+  overflow:scroll;
+}
+@media only screen and (max-width: 767px) {
+.popup {
+padding: 35px 15px;
+  
+}
+}
+.popup-close:after {
+width: 30px;
+content: '╳';
+position: fixed;
+right: 10px;
+top: 10px;
+font-size: 20px;
+line-height: 30px;
+cursor: pointer;
+}
+.popup-btn {
+cursor: pointer;
+  width:100%;
+}
+    .popup-btn a.button {
+    padding: 5px 20px;
+}
+.popup-overlay {
+position: fixed;
+height: 100%;
+width: 100% !important;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+background: rgba(0, 0, 0, 0.6);
+display: none;
+z-index: 100;
+}
+  @media screen and (max-width: 600px) {
+    .colorOption li{
+       width: 50px;
+       height: 30px;
+    }
+    .colorOption li span{
+       background-size: 100%;
+      background-position: center;
+    }
+  }
+  @media screen and (max-width: 420px) {
+  .colorOption li span{
+     font-size: 10px;
+    line-height: 12px;
+  }
+  }
+ 
+</style>

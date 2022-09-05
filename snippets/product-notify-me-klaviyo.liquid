@@ -1,0 +1,87 @@
+<p class="sold_out_custom">
+  Item Out Of Stock
+</p>
+<p>
+  If you want to get notified when this bike is back in stock, leave us your email address by clicking the button below.
+</p>
+<p>
+  <a class="klaviyo-bis-trigger button" href="">Yes, Notify Me!</a>
+</p>
+
+<div class="schedule_a_call">
+  <h3>Don't want to wait?</h3>
+  <p>We've got plenty of options</p>
+  <button onclick="Calendly.showPopupWidget('https://calendly.com/flyrides/call-with-an-ebike-expert');return false;">Schedule a call</button>
+</div>
+
+<style>
+  .schedule_a_call {
+    background-color: #192b49;
+    max-width: 300px;
+    padding: 25px 30px;
+    margin: 0 auto 20px;
+    color: #fff;
+  }
+  .sold_out { display: none; }
+  .sold_out_custom {
+    color: #ed588d;
+    text-transform: uppercase;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .klaviyo-bis-trigger {
+    width: 100%;
+    padding: 7px 20px;
+    margin-bottom: 20px;
+  }
+</style>
+
+<script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+<script>
+    var klaviyo = klaviyo || [];
+    klaviyo.init({
+      account: "R5g2pb",
+      platform: "shopify"
+    });
+    klaviyo.enable("backinstock",{ 
+    trigger: {
+      product_page_text: "Notify Me When Available",
+      product_page_class: "btn",
+      product_page_text_align: "center",
+      product_page_margin: "0px",
+      replace_anchor: false
+    },
+    modal: {
+     headline: "{product_name}",
+     body_content: "Register to receive a notification when this item comes back in stock.",
+     email_field_label: "Email",
+     button_label: "Notify me when available",
+     subscription_success_label: "You're in! We'll let you know when it's back.",
+     footer_content: '',
+     drop_background_color: "#000",
+     background_color: "#fff",
+     text_color: "#222",
+     button_text_color: "#fff",
+     button_background_color: "#439fdb",
+     close_button_color: "#ccc",
+     error_background_color: "#fcd6d7",
+     error_text_color: "#C72E2F",
+     success_background_color: "#d3efcd",
+     success_text_color: "#1B9500"
+    }
+  });
+</script>
+
+<script>
+//   $(function(){
+//     $('.klaviyo-bis-trigger').click(function(){
+//       $(this).hide();
+//       $('.schedule_a_call').show();
+//     });
+//   });
+</script>
+
+<!-- Calendly link widget begin -->
+<link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
+<!-- Calendly link widget end -->
